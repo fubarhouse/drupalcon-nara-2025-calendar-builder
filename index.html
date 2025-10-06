@@ -30,9 +30,14 @@
 
     <div class="container mx-auto px-4 py-8">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">DrupalCon Vienna 2025 Schedule</h2>
-            <p class="text-gray-600">Browse and filter all sessions and events.</p>
-            <p class="text-gray-600">Click sessions to create your custom schedule and click download to get your personalized calendar that you can import to your own calendar application.</p>
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Usage Instructions</h2>
+            <ul class="list-disc list-inside text-gray-600">
+                <li>Browse and filter all sessions and events.</li>
+                <li>Click sessions to select those you want to add to your schedule.</li>
+                <li>Click the "Save Selections" button to save your selections to your browser's local storage in order to resume your selections later.</li>
+                <li>Use the "Add to Calendar" button to add all selected sessions to your calendar.</li>
+                <li>Alternatively, use the "Download as ICS" button to download your personalized schedule in ICS format.</li>
+            </ul>
         </div>
 
         <!-- Filters and Controls -->
@@ -71,7 +76,7 @@
                 <div class="space-y-4">
                     <div>
                         <a id="toggleDetails" class="flex justify-between text-white hover:text-gray-300 text-sm font-medium items-center hover:cursor-pointer">
-                            <span>Expand details of <span id="totalEvents">0</span> in <span id="totalDuration">0 hours</span></span>
+                            <span>Expand selection details: <span id="totalEvents">0</span> sessions in <span id="totalDuration">0 hours</span></span>
                             <i class="fas fa-chevron-up transform transition-transform duration-200"></i>
                         </a>
                         <div id="stageDetails" class="mt-4 pb-8 hidden">
@@ -83,15 +88,16 @@
                         </div>
                     </div>
                     <div class="flex space-x-4">
+                        <button id="saveSelections" class="drupal-blue text-white px-4 py-2 rounded-md drupal-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-save mr-2"></i>Save Selections
+                        </button>
                         <button id="addToCalendar" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <i class="fas fa-calendar-plus mr-2"></i>Add to Calendar
                         </button>
                         <button id="downloadIcs" class="drupal-blue text-white px-4 py-2 rounded-md drupal-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <i class="fas fa-download mr-2"></i>Download as ICS
                         </button>
-                        <button id="saveSelections" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            <i class="fas fa-save mr-2"></i>Save Selections
-                        </button>
+                        
                     </div>
                 </div>
             </div>
@@ -471,7 +477,7 @@ END:VCALENDAR`;
                                         <div class="flex-1">
                                             <h3 class="font-medium text-gray-900 mb-1">${event.summary}</h3>
                                             ${event.location ? `<p class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i>${event.location}</p>` : ''}
-                                            ${event.link ? `<p class="text-sm drupal-blue-text mb-1"><a href="${event.link}" target="_blank" class="hover:underline" onclick="event.stopPropagation()">View Session Details</a></p>` : ''}
+                                            ${event.link ? `<p class="text-sm drupal-blue-text mb-1"><a href="${event.link}" target="_blank" class="hover:underline" onclick="event.stopPropagation()">View Session Details <i class="fas fa-external-link-alt ml-1"></i></a></p>` : ''}
                                             <p class="text-sm text-gray-600 mb-1">${fullDateTime}</p>
                                             ${event.description ? `<p class="text-sm text-gray-700 mb-1">${event.description}</p>` : ''}
                                             <p class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded inline-block">${event.track}</p>
