@@ -6,10 +6,19 @@
     <title>DrupalCon Vienna 2025 - Custom Schedule Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .drupal-blue { background-color: rgb(0, 106, 169); }
+        .drupal-blue-hover:hover { background-color: rgb(0, 85, 135); }
+        .drupal-blue-text { color: rgb(0, 106, 169); }
+        .drupal-blue-border { border-color: rgb(0, 106, 169); }
+        .drupal-blue-focus:focus { border-color: rgb(0, 106, 169); box-shadow: 0 0 0 1px rgb(0, 106, 169); }
+        .drupal-blue-bg-light { background-color: rgb(240, 248, 255); }
+        .drupal-blue-border-light { border-color: rgb(0, 106, 169); }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <!-- Header with Navigation -->
-    <header class="bg-indigo-600 text-white shadow-lg">
+    <header class="drupal-blue text-white shadow-lg">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-4">
@@ -31,23 +40,23 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <select id="dateFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <select id="dateFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
                         <option value="">All Dates</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Track</label>
-                    <select id="trackFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <select id="trackFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
                         <option value="">All Tracks</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
-                    <input type="text" id="keywordsFilter" placeholder="Search by title, description, track..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <input type="text" id="keywordsFilter" placeholder="Search by title, description, track..." class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Show</label>
-                    <select id="selectionFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <select id="selectionFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
                         <option value="all">All</option>
                         <option value="selected">Selected only</option>
                         <option value="unselected">Unselected only</option>
@@ -77,7 +86,7 @@
                         <button id="addToCalendar" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <i class="fas fa-calendar-plus mr-2"></i>Add to Calendar
                         </button>
-                        <button id="downloadIcs" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <button id="downloadIcs" class="drupal-blue text-white px-4 py-2 rounded-md drupal-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <i class="fas fa-download mr-2"></i>Download as ICS
                         </button>
                         <button id="saveSelections" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
@@ -450,19 +459,19 @@ END:VCALENDAR`;
                             const fullDateTime = `${dayDate} - ${startTime} - ${endTime}`;
                             
                             return `
-                            <div class="p-4 rounded-md transition-colors cursor-pointer border-2 ${isSelected ? 'bg-indigo-50 border-indigo-500' : 'bg-gray-50 border-transparent hover:bg-gray-100'}"
+                            <div class="p-4 rounded-md transition-colors cursor-pointer border-2 ${isSelected ? 'drupal-blue-bg-light drupal-blue-border-light' : 'bg-gray-50 border-transparent hover:bg-gray-100'}"
                                  onclick="toggleEventSelection('${event.id}')">
                                 <div class="flex justify-between items-start">
                                     <div class="flex items-start space-x-3 flex-1">
                                         <input type="checkbox" 
-                                               class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
+                                               class="mt-1 h-4 w-4 drupal-blue-text drupal-blue-focus border-gray-300 rounded cursor-pointer"
                                                ${isSelected ? 'checked' : ''}
                                                onclick="event.stopPropagation()"
                                                onchange="toggleEventSelection('${event.id}')">
                                         <div class="flex-1">
                                             <h3 class="font-medium text-gray-900 mb-1">${event.summary}</h3>
                                             ${event.location ? `<p class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i>${event.location}</p>` : ''}
-                                            ${event.link ? `<p class="text-sm text-indigo-600 mb-1"><a href="${event.link}" target="_blank" class="hover:underline" onclick="event.stopPropagation()">View Session Details</a></p>` : ''}
+                                            ${event.link ? `<p class="text-sm drupal-blue-text mb-1"><a href="${event.link}" target="_blank" class="hover:underline" onclick="event.stopPropagation()">View Session Details</a></p>` : ''}
                                             <p class="text-sm text-gray-600 mb-1">${fullDateTime}</p>
                                             ${event.description ? `<p class="text-sm text-gray-700 mb-1">${event.description}</p>` : ''}
                                             <p class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded inline-block">${event.track}</p>
