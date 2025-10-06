@@ -201,7 +201,7 @@
 
             // Populate track filter
             const trackFilter = document.getElementById('trackFilter');
-            uniqueTracks.forEach(track => {
+            uniqueTracks.sort().forEach(track => {
                 const option = document.createElement('option');
                 option.value = track;
                 option.textContent = track;
