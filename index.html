@@ -184,6 +184,19 @@
             return text.replace(regex, '<span class="keyword-highlight">$1</span>');
         }
 
+        // Debounce function to limit the rate of function calls
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
         // Initialize the application
         async function init() {
             const events = await fetchEvents();
@@ -236,7 +249,12 @@
             // Add event listeners
             document.getElementById('dateFilter').addEventListener('change', () => filterEvents(events, 'dateFilter'));
             document.getElementById('trackFilter').addEventListener('change', () => filterEvents(events, 'trackFilter'));
-            document.getElementById('keywordsFilter').addEventListener('input', () => filterEvents(events, 'keywordsFilter'));
+            document.getElementById('keywordsFilter').addEventListener('input', () => {
+                // Immediate filtering for responsive UI
+                filterEvents(events, null, true);
+                // Debounced analytics event
+                debouncedFilterEvents(events);
+            });
             document.getElementById('selectionFilter').addEventListener('change', () => filterEvents(events, 'selectionFilter'));
             document.getElementById('downloadIcs').addEventListener('click', () => downloadSelectedEvents(events));
             document.getElementById('addToCalendar').addEventListener('click', () => addToCalendar(events));
@@ -259,8 +277,8 @@
         }
 
         // Filter events based on selected criteria
-        function filterEvents(events, clickedFilterName) {
-            if (clickedFilterName) {
+        function filterEvents(events, clickedFilterName, skipAnalytics = false) {
+            if (clickedFilterName && !skipAnalytics) {
                 filter_value = document.getElementById(clickedFilterName).value;
                 window.sa_event(clickedFilterName, {
                     filter_value: filter_value
@@ -291,6 +309,11 @@
             
             displayEvents(filteredEvents);
         }
+
+        // Debounced version of filterEvents for analytics (keywords filter only)
+        const debouncedFilterEvents = debounce((events) => {
+            filterEvents(events, 'keywordsFilter');
+        }, 2000); // 2 second delay
 
         // Update download button state
         function updateDownloadButton() {
