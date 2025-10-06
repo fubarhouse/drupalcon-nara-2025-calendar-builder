@@ -32,10 +32,10 @@
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 mb-2">Usage Instructions</h2>
             <ul class="list-disc list-inside text-gray-600">
-                <li>Browse and filter all sessions and events.</li>
-                <li>Click sessions to select those you want to add to your schedule.</li>
-                <li>Click the "Save Selections" button to save your selections to your browser's local storage in order to resume your selections later.</li>
-                <li>Use the "Add to Calendar" button to add all selected sessions to your calendar.</li>
+                <li>Browse and filter sessions and events to find the ones you want to attend.</li>
+                <li>Click on a session to select it.</li>
+                <li>Use the "Save Selections" button to save your selections to your browser's local storage for later visits.</li>
+                <li>Use the "Add to Calendar" button to add all selected sessions directly to your calendar application.</li>
                 <li>Alternatively, use the "Download as ICS" button to download your personalized schedule in ICS format.</li>
             </ul>
         </div>
@@ -76,7 +76,7 @@
                 <div class="space-y-4">
                     <div>
                         <a id="toggleDetails" class="flex justify-between text-white hover:text-gray-300 text-sm font-medium items-center hover:cursor-pointer">
-                            <span>Expand selection details: <span id="totalEvents">0</span> sessions in <span id="totalDuration">0 hours</span></span>
+                            <span>Selected sessions: <span id="totalEvents">0</span> sessions in <span id="totalDuration">0 hours</span> (expand to see details)</span>
                             <i class="fas fa-chevron-up transform transition-transform duration-200"></i>
                         </a>
                         <div id="stageDetails" class="mt-4 pb-8 hidden">
