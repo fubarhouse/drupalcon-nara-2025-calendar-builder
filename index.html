@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrupalCon Vienna 2025 - Custom Schedule Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header with Navigation -->
+    <header class="bg-indigo-600 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold">DrupalCon Vienna 2025 - Custom Schedule Builder</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">DrupalCon Vienna 2025 Schedule</h2>
+            <p class="text-gray-600">Browse and filter all sessions and events.</p>
+            <p class="text-gray-600">Click sessions to create your custom schedule and click download to get your personalized calendar that you can import to your own calendar application.</p>
+        </div>
+
+        <!-- Filters and Controls -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <select id="dateFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="">All Dates</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Track</label>
+                    <select id="trackFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="">All Tracks</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Session</label>
+                    <input type="text" id="sessionFilter" placeholder="Search sessions..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Selection</label>
+                    <select id="selectionFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="all">All Events</option>
+                        <option value="selected">Selected Events</option>
+                        <option value="unselected">Unselected Events</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selection Overview Panel -->
+        <div id="selectionOverview" class="fixed bottom-0 left-0 right-0 bg-black shadow-lg border-t border-gray-200 p-4 transform transition-transform duration-300 translate-y-full">
+            <div class="container mx-auto">
+                <div class="space-y-4">
+                    <div>
+                        <a id="toggleDetails" class="flex justify-between text-white hover:text-gray-300 text-sm font-medium items-center hover:cursor-pointer">
+                            <span>Expand details of <span id="totalEvents">0</span> in <span id="totalDuration">0 hours</span></span>
+                            <i class="fas fa-chevron-up transform transition-transform duration-200"></i>
+                        </a>
+                        <div id="stageDetails" class="mt-4 pb-8 hidden">
+                            <div class="border-t border-b border-gray-700 py-4">
+                                <div id="stageStats" class="space-y-2">
+                                    <!-- Stage statistics will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button id="addToCalendar" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-calendar-plus mr-2"></i>Add to Calendar
+                        </button>
+                        <button id="downloadIcs" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-download mr-2"></i>Download as ICS
+                        </button>
+                        <button id="saveSelections" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-save mr-2"></i>Save Selections
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Display -->
+        <div id="eventsContainer" class="bg-white rounded-lg shadow-md p-4 mb-24">
+            <!-- Events will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Fetch and process events data
+        async function fetchEvents() {
+            try {
+                const response = await fetch('data/events.json');
+                const data = await response.json();
+                data.events.forEach(event => {
+                    event.clean_title = event.summary
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]/g, '_')
+                        .replace(/_+/g, '_')
+                        .replace(/^_|_$/g, '');
+                });
+                return data.events;
+            } catch (error) {
+                
+                return [];
+            }
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Format duration
+        function formatDuration(duration) {
+            const hoursMatch = duration.match(/(\d+)H/);
+            const minutesMatch = duration.match(/(\d+)M/);
+            const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+            const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+            
+            if (hours === 0) {
+                return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            } else if (minutes === 0) {
+                return `${hours} hour${hours !== 1 ? 's' : ''}`;
+            } else {
+                return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            }
+        }
+
+        // Initialize the application
+        async function init() {
+            const events = await fetchEvents();
+            // Add unique IDs to events
+            events.forEach((event, index) => {
+                event.id = `${event.startTime}-${event.location}-${event.summary}`.replace(/[^a-zA-Z0-9-]/g, '-');
+            });
+            const uniqueDates = [...new Set(events.map(event => event.startTime.split('T')[0]))];
+            const uniqueTracks = [...new Set(events.map(event => event.track))];
+
+            // Initialize selected events set from localStorage or create new Set
+            const savedSelections = localStorage.getItem('drupalconSelectedEvents');
+            window.selectedEvents = new Set(savedSelections ? JSON.parse(savedSelections) : []);
+            window.lastSavedState = new Set(window.selectedEvents); // Track last saved state
+            window.allEvents = events; // Store all events for reference
+
+            // Show selection overview panel and enable buttons if there are saved selections
+            if (window.selectedEvents.size > 0) {
+                const overviewPanel = document.getElementById('selectionOverview');
+                overviewPanel.classList.remove('translate-y-full');
+                updateSelectionOverview(events);
+                updateDownloadButton();
+            }
+
+            // Populate date filter
+            const dateFilter = document.getElementById('dateFilter');
+            uniqueDates.sort().forEach(date => {
+                const option = document.createElement('option');
+                option.value = date;
+                option.textContent = new Date(date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                dateFilter.appendChild(option);
+            });
+
+            // Populate track filter
+            const trackFilter = document.getElementById('trackFilter');
+            uniqueTracks.forEach(track => {
+                const option = document.createElement('option');
+                option.value = track;
+                option.textContent = track;
+                trackFilter.appendChild(option);
+            });
+
+            // Display events
+            displayEvents(events);
+
+            // Add event listeners
+            document.getElementById('dateFilter').addEventListener('change', () => filterEvents(events, 'dateFilter'));
+            document.getElementById('trackFilter').addEventListener('change', () => filterEvents(events, 'trackFilter'));
+            document.getElementById('sessionFilter').addEventListener('input', () => filterEvents(events, 'sessionFilter'));
+            document.getElementById('selectionFilter').addEventListener('change', () => filterEvents(events, 'selectionFilter'));
+            document.getElementById('downloadIcs').addEventListener('click', () => downloadSelectedEvents(events));
+            document.getElementById('addToCalendar').addEventListener('click', () => addToCalendar(events));
+            document.getElementById('saveSelections').addEventListener('click', () => saveSelections());
+            
+            // Add toggle details event listener
+            document.getElementById('toggleDetails').addEventListener('click', () => {
+                const detailsSection = document.getElementById('stageDetails');
+                const toggleIcon = document.querySelector('#toggleDetails i');
+                if (detailsSection.classList.contains('hidden')) {
+                    window.sa_event('selection_details_opened');
+                    detailsSection.classList.remove('hidden');
+                    toggleIcon.classList.add('rotate-180');
+                } else {
+                    window.sa_event('selection_details_closed');
+                    detailsSection.classList.add('hidden');
+                    toggleIcon.classList.remove('rotate-180');
+                }
+            });
+        }
+
+        // Filter events based on selected criteria
+        function filterEvents(events, clickedFilterName) {
+            if (clickedFilterName) {
+                filter_value = document.getElementById(clickedFilterName).value;
+                window.sa_event(clickedFilterName, {
+                    filter_value: filter_value
+                });
+            }
+            const dateFilter = document.getElementById('dateFilter').value;
+            const trackFilter = document.getElementById('trackFilter').value;
+            const sessionFilter = document.getElementById('sessionFilter').value.toLowerCase();
+            const selectionFilter = document.getElementById('selectionFilter').value;
+
+            const filteredEvents = events.filter(event => {
+                const matchesDate = !dateFilter || event.startTime.startsWith(dateFilter);
+                const matchesTrack = !trackFilter || event.track === trackFilter;
+                const matchesSession = !sessionFilter || event.summary.toLowerCase().includes(sessionFilter);
+                const matchesSelection = selectionFilter === 'all' || 
+                    (selectionFilter === 'selected' && window.selectedEvents.has(event.id)) ||
+                    (selectionFilter === 'unselected' && !window.selectedEvents.has(event.id));
+                return matchesDate && matchesTrack && matchesSession && matchesSelection;
+            });
+
+            
+            displayEvents(filteredEvents);
+        }
+
+        // Update download button state
+        function updateDownloadButton() {
+            const downloadButton = document.getElementById('downloadIcs');
+            const addToCalendarButton = document.getElementById('addToCalendar');
+            const saveButton = document.getElementById('saveSelections');
+            const hasSelections = window.selectedEvents.size > 0;
+            const hasUnsavedChanges = !areSetsEqual(window.selectedEvents, window.lastSavedState);
+            
+            downloadButton.disabled = !hasSelections;
+            addToCalendarButton.disabled = !hasSelections;
+            saveButton.disabled = !hasUnsavedChanges;
+        }
+
+        // Helper function to compare two Sets
+        function areSetsEqual(set1, set2) {
+            if (set1.size !== set2.size) return false;
+            for (const item of set1) {
+                if (!set2.has(item)) return false;
+            }
+            return true;
+        }
+
+        // Update selection overview
+        function updateSelectionOverview(events) {
+            const overviewPanel = document.getElementById('selectionOverview');
+            const selectedEvents = events.filter(event => window.selectedEvents.has(event.id));
+            
+            if (selectedEvents.length === 0) {
+                overviewPanel.classList.add('translate-y-full');
+                return;
+            }
+            
+            overviewPanel.classList.remove('translate-y-full');
+            
+            // Calculate statistics by stage
+            const stageStats = {};
+            selectedEvents.forEach(event => {
+                if (!stageStats[event.location]) {
+                    stageStats[event.location] = {
+                        count: 0,
+                        duration: 0
+                    };
+                }
+                stageStats[event.location].count++;
+                
+                // Parse duration
+                const duration = event.duration;
+                const hoursMatch = duration.match(/(\d+)H/);
+                const minutesMatch = duration.match(/(\d+)M/);
+                const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+                const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+                stageStats[event.location].duration += hours + (minutes / 60);
+            });
+            
+            // Update stage statistics
+            updateStageStats(stageStats);
+            
+            // Update total statistics
+            const totalEvents = selectedEvents.length;
+            const totalDuration = Object.values(stageStats)
+                .reduce((sum, stats) => sum + stats.duration, 0);
+            
+            document.getElementById('totalEvents').textContent = totalEvents;
+            document.getElementById('totalDuration').textContent = `${totalDuration.toFixed(1)} hours`;
+        }
+
+        // Toggle event selection
+        function toggleEventSelection(eventId) {
+            const event = window.allEvents.find(event => event.id === eventId);
+            const artist_metadata = {
+                artist: event.summary,
+            }
+            const stage_metadata = {
+                stage: event.location,
+            }
+            if (window.selectedEvents.has(eventId)) {
+                window.selectedEvents.delete(eventId);
+                window.sa_event('removeArtist', artist_metadata);
+                window.sa_event('removeAtStage', stage_metadata);
+            } else {
+                window.selectedEvents.add(eventId);
+                window.sa_event('addArtist', artist_metadata);
+                window.sa_event('addAtStage', stage_metadata);
+            }
+            
+            updateDownloadButton();
+            updateSelectionOverview(window.allEvents);
+            
+            // Re-filter events to update the view
+            filterEvents(window.allEvents);
+        }
+
+        // Generate ICS content for selected events
+        function generateIcsContent(events) {
+            const selectedEvents = events.filter(event => window.selectedEvents.has(event.id));
+            const icsEvents = selectedEvents.map(event => {
+                const start = new Date(event.startTime).toISOString().replace(/[-:]/g, '').split('.')[0];
+                const end = new Date(event.endTime).toISOString().replace(/[-:]/g, '').split('.')[0];
+                
+                return `BEGIN:VEVENT
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:[${event.location}] - ${event.summary}
+LOCATION:${event.location}
+DESCRIPTION:${event.description || ''}
+END:VEVENT`;
+            }).join('\n');
+
+            return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//DrupalCon Vienna 2025//EN
+X-WR-CALNAME:DrupalCon Vienna 2025
+X-WR-TIMEZONE:Europe/Vienna
+${icsEvents}
+END:VCALENDAR`;
+        }
+
+        // Download selected events as ICS file
+        function downloadSelectedEvents(events) {
+            const metadata = {
+                total_events: events.length,
+                total_duration: events.reduce((sum, event) => sum + parseInt(event.duration.replace('PT', '').replace('H', '')), 0)
+            }
+            window.sa_event('download_ics', metadata);
+            const icsContent = generateIcsContent(events);
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'drupalcon-vienna-2025-selected-events.ics';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Add selected events directly to calendar
+        function addToCalendar(events) {
+            const metadata = {
+                total_events: events.length,
+                total_duration: events.reduce((sum, event) => sum + parseInt(event.duration.replace('PT', '').replace('H', '')), 0)
+            }
+            window.sa_event('add_to_calendar', metadata);
+            const icsContent = generateIcsContent(events);
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('type', 'text/calendar');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Display events in the current view
+        function displayEvents(events) {
+            const container = document.getElementById('eventsContainer');
+            displayListView(events, container);
+        }
+
+        // Display events in list view
+        function displayListView(events, container) {
+            
+            const groupedEvents = groupEventsByLocation(events);
+            container.innerHTML = '';
+
+            Object.entries(groupedEvents).forEach(([location, locationEvents]) => {
+                
+                const locationSection = document.createElement('div');
+                locationSection.className = 'mb-6';
+                locationSection.innerHTML = `
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">${location}</h2>
+                    <div class="space-y-2">
+                        ${locationEvents.map(event => {
+                            const isSelected = window.selectedEvents.has(event.id);
+                            
+                            return `
+                            <div class="p-4 rounded-md transition-colors cursor-pointer border-2 ${isSelected ? 'bg-indigo-50 border-indigo-500' : 'bg-gray-50 border-transparent hover:bg-gray-100'}"
+                                 onclick="toggleEventSelection('${event.id}')">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-start space-x-3">
+                                        <input type="checkbox" 
+                                               class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
+                                               ${isSelected ? 'checked' : ''}
+                                               onclick="event.stopPropagation()"
+                                               onchange="toggleEventSelection('${event.id}')">
+                                        <div>
+                                            <h3 class="font-medium text-gray-900">${event.summary}</h3>
+                                            <p class="text-sm text-gray-600">${formatDate(event.startTime)}</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm text-gray-500">${formatDuration(event.duration)}</span>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(locationSection);
+            });
+        }
+
+        // Group events by location
+        function groupEventsByLocation(events) {
+            return events.reduce((groups, event) => {
+                if (!groups[event.location]) {
+                    groups[event.location] = [];
+                }
+                groups[event.location].push(event);
+                return groups;
+            }, {});
+        }
+
+        // Update stage statistics
+        function updateStageStats(stageStats) {
+            const stageStatsContainer = document.getElementById('stageStats');
+            const selectedEvents = window.allEvents.filter(event => window.selectedEvents.has(event.id));
+            
+            // Calculate daily statistics
+            const dailyStats = {};
+            selectedEvents.forEach(event => {
+                const date = event.startTime.split('T')[0];
+                if (!dailyStats[date]) {
+                    dailyStats[date] = {
+                        count: 0,
+                        duration: 0
+                    };
+                }
+                dailyStats[date].count++;
+                
+                // Parse duration
+                const duration = event.duration;
+                const hoursMatch = duration.match(/(\d+)H/);
+                const minutesMatch = duration.match(/(\d+)M/);
+                const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+                const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+                dailyStats[date].duration += hours + (minutes / 60);
+            });
+
+            // Sort dates
+            const sortedDates = Object.keys(dailyStats).sort();
+
+            stageStatsContainer.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-white font-medium mb-2">By Stage</h4>
+                        ${Object.entries(stageStats)
+                            .map(([stage, stats]) => `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-white">${stage}</span>
+                                    <div class="text-sm text-gray-400">
+                                        <span>${stats.count} events</span>
+                                        <span class="mx-2">•</span>
+                                        <span>${stats.duration.toFixed(1)} hours</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                    </div>
+                    <div class="border-t border-gray-700 pt-4">
+                        <h4 class="text-white font-medium mb-2">By Day</h4>
+                        ${sortedDates
+                            .map(date => {
+                                const stats = dailyStats[date];
+                                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                                    weekday: 'short',
+                                    month: 'short',
+                                    day: 'numeric'
+                                });
+                                return `
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-white">${formattedDate}</span>
+                                        <div class="text-sm text-gray-400">
+                                            <span>${stats.count} events</span>
+                                            <span class="mx-2">•</span>
+                                            <span>${stats.duration.toFixed(1)} hours</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Save selections to localStorage
+        function saveSelections() {
+            const metadata = {
+                total_events: window.selectedEvents.size
+            }
+            window.sa_event('save_selections', metadata);
+            localStorage.setItem('drupalconSelectedEvents', JSON.stringify([...window.selectedEvents]));
+            window.lastSavedState = new Set(window.selectedEvents); // Update last saved state
+            
+            // Show a temporary success message
+            const saveButton = document.getElementById('saveSelections');
+            const originalText = saveButton.innerHTML;
+            saveButton.innerHTML = '<i class="fas fa-check mr-2"></i>Saved!';
+            saveButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            saveButton.classList.add('bg-green-600', 'hover:bg-green-700');
+            
+            setTimeout(() => {
+                saveButton.innerHTML = originalText;
+                saveButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+                saveButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }, 2000);
+
+            updateDownloadButton(); // Update button states after saving
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <!-- 100% privacy-first analytics -->
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+</body>
+</html> 
