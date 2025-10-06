@@ -50,7 +50,12 @@
                 <!-- Keywords filter - full width on its own row -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
-                    <input type="text" id="keywordsFilter" placeholder="Search by title, speaker, track..." class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
+                    <div class="relative">
+                        <input type="text" id="keywordsFilter" placeholder="Search by title, speaker, track..." class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus pr-10">
+                        <button id="clearKeywords" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none hidden" title="Clear search">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Other filters in a row -->
@@ -250,11 +255,14 @@
             document.getElementById('dateFilter').addEventListener('change', () => filterEvents(events, 'dateFilter'));
             document.getElementById('trackFilter').addEventListener('change', () => filterEvents(events, 'trackFilter'));
             document.getElementById('keywordsFilter').addEventListener('input', () => {
+                // Toggle clear button visibility
+                toggleClearButton();
                 // Immediate filtering for responsive UI
                 filterEvents(events, null, true);
                 // Debounced analytics event
                 debouncedFilterEvents(events);
             });
+            document.getElementById('clearKeywords').addEventListener('click', () => clearKeywordsFilter(events));
             document.getElementById('selectionFilter').addEventListener('change', () => filterEvents(events, 'selectionFilter'));
             document.getElementById('downloadIcs').addEventListener('click', () => downloadSelectedEvents(events));
             document.getElementById('addToCalendar').addEventListener('click', () => addToCalendar(events));
@@ -314,6 +322,27 @@
         const debouncedFilterEvents = debounce((events) => {
             filterEvents(events, 'keywordsFilter');
         }, 2000); // 2 second delay
+
+        // Toggle clear button visibility based on keywords filter content
+        function toggleClearButton() {
+            const keywordsFilter = document.getElementById('keywordsFilter');
+            const clearButton = document.getElementById('clearKeywords');
+            
+            if (keywordsFilter.value.trim() !== '') {
+                clearButton.classList.remove('hidden');
+            } else {
+                clearButton.classList.add('hidden');
+            }
+        }
+
+        // Clear keywords filter
+        function clearKeywordsFilter(events) {
+            const keywordsFilter = document.getElementById('keywordsFilter');
+            keywordsFilter.value = '';
+            toggleClearButton();
+            // Trigger filtering without analytics (since user is clearing)
+            filterEvents(events, null, true);
+        }
 
         // Update download button state
         function updateDownloadButton() {
