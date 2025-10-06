@@ -42,8 +42,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Session</label>
-                    <input type="text" id="sessionFilter" placeholder="Search sessions..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
+                    <input type="text" id="keywordsFilter" placeholder="Search by title, description, track..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Show</label>
@@ -194,7 +194,7 @@
             // Add event listeners
             document.getElementById('dateFilter').addEventListener('change', () => filterEvents(events, 'dateFilter'));
             document.getElementById('trackFilter').addEventListener('change', () => filterEvents(events, 'trackFilter'));
-            document.getElementById('sessionFilter').addEventListener('input', () => filterEvents(events, 'sessionFilter'));
+            document.getElementById('keywordsFilter').addEventListener('input', () => filterEvents(events, 'keywordsFilter'));
             document.getElementById('selectionFilter').addEventListener('change', () => filterEvents(events, 'selectionFilter'));
             document.getElementById('downloadIcs').addEventListener('click', () => downloadSelectedEvents(events));
             document.getElementById('addToCalendar').addEventListener('click', () => addToCalendar(events));
@@ -226,17 +226,24 @@
             }
             const dateFilter = document.getElementById('dateFilter').value;
             const trackFilter = document.getElementById('trackFilter').value;
-            const sessionFilter = document.getElementById('sessionFilter').value.toLowerCase();
+            const keywordsFilter = document.getElementById('keywordsFilter').value.toLowerCase();
             const selectionFilter = document.getElementById('selectionFilter').value;
 
             const filteredEvents = events.filter(event => {
                 const matchesDate = !dateFilter || event.startTime.startsWith(dateFilter);
                 const matchesTrack = !trackFilter || event.track === trackFilter;
-                const matchesSession = !sessionFilter || event.summary.toLowerCase().includes(sessionFilter);
+                
+                // Search across all fields: title, description, track, location
+                const matchesKeywords = !keywordsFilter || 
+                    event.summary.toLowerCase().includes(keywordsFilter) ||
+                    (event.description && event.description.toLowerCase().includes(keywordsFilter)) ||
+                    event.track.toLowerCase().includes(keywordsFilter) ||
+                    event.location.toLowerCase().includes(keywordsFilter);
+                
                 const matchesSelection = selectionFilter === 'all' || 
                     (selectionFilter === 'selected' && window.selectedEvents.has(event.id)) ||
                     (selectionFilter === 'unselected' && !window.selectedEvents.has(event.id));
-                return matchesDate && matchesTrack && matchesSession && matchesSelection;
+                return matchesDate && matchesTrack && matchesKeywords && matchesSelection;
             });
 
             
