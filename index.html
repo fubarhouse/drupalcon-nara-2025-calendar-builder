@@ -14,6 +14,10 @@
         .drupal-blue-focus:focus { border-color: rgb(0, 106, 169); box-shadow: 0 0 0 1px rgb(0, 106, 169); }
         .drupal-blue-bg-light { background-color: rgb(240, 248, 255); }
         .drupal-blue-border-light { border-color: rgb(0, 106, 169); }
+        .keyword-highlight { 
+            background-color: #fef3c7; 
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -42,30 +46,35 @@
 
         <!-- Filters and Controls -->
         <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <select id="dateFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
-                        <option value="">All Dates</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Track</label>
-                    <select id="trackFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
-                        <option value="">All Tracks</option>
-                    </select>
-                </div>
+            <div class="space-y-4">
+                <!-- Keywords filter - full width on its own row -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
-                    <input type="text" id="keywordsFilter" placeholder="Search by title, description, track..." class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
+                    <input type="text" id="keywordsFilter" placeholder="Search by title, speaker, track..." class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Show</label>
-                    <select id="selectionFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
-                        <option value="all">All</option>
-                        <option value="selected">Selected only</option>
-                        <option value="unselected">Unselected only</option>
-                    </select>
+                
+                <!-- Other filters in a row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Day</label>
+                        <select id="dateFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
+                            <option value="">All Days</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Track</label>
+                        <select id="trackFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
+                            <option value="">All Tracks</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Show</label>
+                        <select id="selectionFilter" class="w-full rounded-md border-gray-300 shadow-sm drupal-blue-focus">
+                            <option value="all">All</option>
+                            <option value="selected">Selected only</option>
+                            <option value="unselected">Unselected only</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,6 +169,19 @@
             } else {
                 return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
             }
+        }
+
+        // Highlight keywords in text
+        function highlightKeywords(text, keywords) {
+            if (!keywords || keywords.trim() === '') {
+                return text;
+            }
+            
+            // Escape special regex characters in the keywords
+            const escapedKeywords = keywords.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedKeywords})`, 'gi');
+            
+            return text.replace(regex, '<span class="keyword-highlight">$1</span>');
         }
 
         // Initialize the application
@@ -434,6 +456,9 @@ END:VCALENDAR`;
             
             const groupedEvents = groupEventsByDate(events);
             container.innerHTML = '';
+            
+            // Get current keywords filter value for highlighting
+            const keywordsFilter = document.getElementById('keywordsFilter').value;
 
             Object.entries(groupedEvents).forEach(([date, dateEvents]) => {
                 
@@ -469,6 +494,12 @@ END:VCALENDAR`;
                             
                             const fullDateTime = `${dayDate} - ${startTime} - ${endTime}`;
                             
+                            // Apply keyword highlighting to relevant fields
+                            const highlightedSummary = highlightKeywords(event.summary, keywordsFilter);
+                            const highlightedLocation = event.location ? highlightKeywords(event.location, keywordsFilter) : '';
+                            const highlightedDescription = event.description ? highlightKeywords(event.description, keywordsFilter) : '';
+                            const highlightedTrack = highlightKeywords(event.track, keywordsFilter);
+                            
                             return `
                             <div class="p-4 rounded-md transition-colors cursor-pointer border-2 ${isSelected ? 'drupal-blue-bg-light drupal-blue-border-light' : 'bg-gray-50 border-transparent hover:bg-gray-100'}"
                                  onclick="toggleEventSelection('${event.id}')">
@@ -480,12 +511,12 @@ END:VCALENDAR`;
                                                onclick="event.stopPropagation()"
                                                onchange="toggleEventSelection('${event.id}')">
                                         <div class="flex-1">
-                                            <h3 class="font-medium text-gray-900 mb-1">${event.summary}</h3>
-                                            ${event.location ? `<p class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i>${event.location}</p>` : ''}
+                                            <h3 class="font-medium text-gray-900 mb-1">${highlightedSummary}</h3>
+                                            ${event.location ? `<p class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i>${highlightedLocation}</p>` : ''}
                                             ${event.link ? `<p class="text-sm drupal-blue-text mb-1"><a href="${event.link}" target="_blank" class="hover:underline" onclick="event.stopPropagation()">View Session Details <i class="fas fa-external-link-alt ml-1"></i></a></p>` : ''}
                                             <p class="text-sm text-gray-600 mb-1">${fullDateTime}</p>
-                                            ${event.description ? `<p class="text-sm text-gray-700 mb-1">${event.description}</p>` : ''}
-                                            <p class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded inline-block">${event.track}</p>
+                                            ${event.description ? `<p class="text-sm text-gray-700 mb-1">${highlightedDescription}</p>` : ''}
+                                            <p class="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded inline-block">${highlightedTrack}</p>
                                         </div>
                                     </div>
                                     <span class="text-sm text-gray-500 ml-4">${formatDuration(event.duration)}</span>
