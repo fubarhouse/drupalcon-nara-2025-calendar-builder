@@ -37,10 +37,8 @@
             <h2 class="text-xl font-bold text-gray-800 mb-2">Usage Instructions</h2>
             <ul class="list-disc list-inside text-gray-600">
                 <li>Browse and filter sessions and events to find the ones you want to attend.</li>
-                <li>Click on a session to select it.</li>
-                <li>Use the "Save Selections" button to save your selections to your browser's local storage for later visits.</li>
-                <li>Use the "Add to Calendar" button to add all selected sessions directly to your calendar application.</li>
-                <li>Alternatively, use the "Download as ICS" button to download your personalized schedule in ICS format.</li>
+                <li>Click on a session to select it. Your selections are automatically saved to your browser.</li>
+                <li>Use the "Download ICS" button to download your personalized schedule and import it into your calendar application.</li>
             </ul>
         </div>
 
@@ -102,16 +100,9 @@
                         </div>
                     </div>
                     <div class="flex space-x-4">
-                        <button id="saveSelections" class="drupal-blue text-white px-4 py-2 rounded-md drupal-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            <i class="fas fa-save mr-2"></i>Save Selections
-                        </button>
-                        <button id="addToCalendar" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            <i class="fas fa-calendar-plus mr-2"></i>Add to Calendar
-                        </button>
                         <button id="downloadIcs" class="drupal-blue text-white px-4 py-2 rounded-md drupal-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            <i class="fas fa-download mr-2"></i>Download as ICS
+                            <i class="fas fa-download mr-2"></i>Download ICS
                         </button>
-                        
                     </div>
                 </div>
             </div>
@@ -215,7 +206,6 @@
             // Initialize selected events set from localStorage or create new Set
             const savedSelections = localStorage.getItem('drupalconSelectedEvents');
             window.selectedEvents = new Set(savedSelections ? JSON.parse(savedSelections) : []);
-            window.lastSavedState = new Set(window.selectedEvents); // Track last saved state
             window.allEvents = events; // Store all events for reference
 
             // Show selection overview panel and enable buttons if there are saved selections
@@ -265,8 +255,6 @@
             document.getElementById('clearKeywords').addEventListener('click', () => clearKeywordsFilter(events));
             document.getElementById('selectionFilter').addEventListener('change', () => filterEvents(events, 'selectionFilter'));
             document.getElementById('downloadIcs').addEventListener('click', () => downloadSelectedEvents(events));
-            document.getElementById('addToCalendar').addEventListener('click', () => addToCalendar(events));
-            document.getElementById('saveSelections').addEventListener('click', () => saveSelections());
             
             // Add toggle details event listener
             document.getElementById('toggleDetails').addEventListener('click', () => {
@@ -347,23 +335,9 @@
         // Update download button state
         function updateDownloadButton() {
             const downloadButton = document.getElementById('downloadIcs');
-            const addToCalendarButton = document.getElementById('addToCalendar');
-            const saveButton = document.getElementById('saveSelections');
             const hasSelections = window.selectedEvents.size > 0;
-            const hasUnsavedChanges = !areSetsEqual(window.selectedEvents, window.lastSavedState);
             
             downloadButton.disabled = !hasSelections;
-            addToCalendarButton.disabled = !hasSelections;
-            saveButton.disabled = !hasUnsavedChanges;
-        }
-
-        // Helper function to compare two Sets
-        function areSetsEqual(set1, set2) {
-            if (set1.size !== set2.size) return false;
-            for (const item of set1) {
-                if (!set2.has(item)) return false;
-            }
-            return true;
         }
 
         // Update selection overview
@@ -428,6 +402,9 @@
                 window.sa_event?.('addSession', session_metadata);
                 window.sa_event?.('addToTrack', track_metadata);
             }
+            
+            // Automatically save to localStorage
+            localStorage.setItem('drupalconSelectedEvents', JSON.stringify([...window.selectedEvents]));
             
             updateDownloadButton();
             updateSelectionOverview(window.allEvents);
@@ -517,11 +494,6 @@ END:VCALENDAR`;
         // Download selected events as ICS file
         function downloadSelectedEvents(events) {
             triggerIcsDownload(events, 'drupalcon-vienna-2025-selected-events.ics', 'download_ics');
-        }
-
-        // Add selected events directly to calendar
-        function addToCalendar(events) {
-            triggerIcsDownload(events, 'drupalcon-vienna-2025-selected-events.ics', 'add_to_calendar');
         }
 
         // Display events in the current view
@@ -709,31 +681,6 @@ END:VCALENDAR`;
                     </div>
                 </div>
             `;
-        }
-
-        // Save selections to localStorage
-        function saveSelections() {
-            const metadata = {
-                total_events: window.selectedEvents.size
-            }
-            window.sa_event?.('save_selections', metadata);
-            localStorage.setItem('drupalconSelectedEvents', JSON.stringify([...window.selectedEvents]));
-            window.lastSavedState = new Set(window.selectedEvents); // Update last saved state
-            
-            // Show a temporary success message
-            const saveButton = document.getElementById('saveSelections');
-            const originalText = saveButton.innerHTML;
-            saveButton.innerHTML = '<i class="fas fa-check mr-2"></i>Saved!';
-            saveButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-            saveButton.classList.add('bg-green-600', 'hover:bg-green-700');
-            
-            setTimeout(() => {
-                saveButton.innerHTML = originalText;
-                saveButton.classList.remove('bg-green-600', 'hover:bg-green-700');
-                saveButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
-            }, 2000);
-
-            updateDownloadButton(); // Update button states after saving
         }
 
         // Initialize the application when the page loads
