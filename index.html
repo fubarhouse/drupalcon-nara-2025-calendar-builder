@@ -456,13 +456,15 @@
                 const uid = `${event.id}@drupalcon-vienna-2025`;
                 
                 // Escape special characters in description for ICS format
-                const description = (event.description || '').replace(/\n/g, '\\n').replace(/,/g, '\\,');
+                // Add URL before the description
+                const urlPart = event.link ? `${event.link}\\n\\n` : '';
+                const description = urlPart + (event.description || '').replace(/\n/g, '\\n').replace(/,/g, '\\,');
                 
                 return `BEGIN:VEVENT
 UID:${uid}
 DTSTART;TZID=Europe/Vienna:${start}
 DTEND;TZID=Europe/Vienna:${end}
-SUMMARY:[${event.location}] - ${event.summary}
+SUMMARY:${event.summary}
 LOCATION:${event.location}
 DESCRIPTION:${description}
 END:VEVENT`;
