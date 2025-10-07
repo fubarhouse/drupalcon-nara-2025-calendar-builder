@@ -273,11 +273,11 @@
                 const detailsSection = document.getElementById('stageDetails');
                 const toggleIcon = document.querySelector('#toggleDetails i');
                 if (detailsSection.classList.contains('hidden')) {
-                    window.sa_event('selection_details_opened');
+                    window.sa_event?.('selection_details_opened');
                     detailsSection.classList.remove('hidden');
                     toggleIcon.classList.add('rotate-180');
                 } else {
-                    window.sa_event('selection_details_closed');
+                    window.sa_event?.('selection_details_closed');
                     detailsSection.classList.add('hidden');
                     toggleIcon.classList.remove('rotate-180');
                 }
@@ -288,7 +288,7 @@
         function filterEvents(events, clickedFilterName, skipAnalytics = false) {
             if (clickedFilterName && !skipAnalytics) {
                 filter_value = document.getElementById(clickedFilterName).value;
-                window.sa_event(clickedFilterName, {
+                window.sa_event?.(clickedFilterName, {
                     filter_value: filter_value
                 });
             }
@@ -421,12 +421,12 @@
             }
             if (window.selectedEvents.has(eventId)) {
                 window.selectedEvents.delete(eventId);
-                window.sa_event('removeSession', session_metadata);
-                window.sa_event('removeFromTrack', track_metadata);
+                window.sa_event?.('removeSession', session_metadata);
+                window.sa_event?.('removeFromTrack', track_metadata);
             } else {
                 window.selectedEvents.add(eventId);
-                window.sa_event('addSession', session_metadata);
-                window.sa_event('addToTrack', track_metadata);
+                window.sa_event?.('addSession', session_metadata);
+                window.sa_event?.('addToTrack', track_metadata);
             }
             
             updateDownloadButton();
@@ -467,7 +467,7 @@ END:VCALENDAR`;
                 total_events: events.length,
                 total_duration: events.reduce((sum, event) => sum + parseInt(event.duration.replace('PT', '').replace('H', '')), 0)
             }
-            window.sa_event('download_ics', metadata);
+            window.sa_event?.('download_ics', metadata);
             const icsContent = generateIcsContent(events);
             const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
             const link = document.createElement('a');
@@ -484,7 +484,7 @@ END:VCALENDAR`;
                 total_events: events.length,
                 total_duration: events.reduce((sum, event) => sum + parseInt(event.duration.replace('PT', '').replace('H', '')), 0)
             }
-            window.sa_event('add_to_calendar', metadata);
+            window.sa_event?.('add_to_calendar', metadata);
             const icsContent = generateIcsContent(events);
             const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -689,7 +689,7 @@ END:VCALENDAR`;
             const metadata = {
                 total_events: window.selectedEvents.size
             }
-            window.sa_event('save_selections', metadata);
+            window.sa_event?.('save_selections', metadata);
             localStorage.setItem('drupalconSelectedEvents', JSON.stringify([...window.selectedEvents]));
             window.lastSavedState = new Set(window.selectedEvents); // Update last saved state
             
