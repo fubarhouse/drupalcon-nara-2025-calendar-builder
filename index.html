@@ -436,19 +436,35 @@
             filterEvents(window.allEvents);
         }
 
+        // Helper function to format date for ICS in Vienna timezone
+        function formatDateForICS(dateString) {
+            // Parse the ISO date string directly to avoid timezone conversion issues
+            // The source data is in Vienna time, so we preserve it as-is
+            // Format: "2025-10-14T09:30:00" -> "20251014T093000"
+            return dateString.replace(/[-:]/g, '').replace(/\.\d+/, '');
+        }
+
         // Generate ICS content for selected events
         function generateIcsContent(events) {
             const selectedEvents = events.filter(event => window.selectedEvents.has(event.id));
             const icsEvents = selectedEvents.map(event => {
-                const start = new Date(event.startTime).toISOString().replace(/[-:]/g, '').split('.')[0];
-                const end = new Date(event.endTime).toISOString().replace(/[-:]/g, '').split('.')[0];
+                // Format times preserving the local timezone
+                const start = formatDateForICS(event.startTime);
+                const end = formatDateForICS(event.endTime);
+                
+                // Generate a unique UID for the event
+                const uid = `${event.id}@drupalcon-vienna-2025`;
+                
+                // Escape special characters in description for ICS format
+                const description = (event.description || '').replace(/\n/g, '\\n').replace(/,/g, '\\,');
                 
                 return `BEGIN:VEVENT
-DTSTART:${start}
-DTEND:${end}
+UID:${uid}
+DTSTART;TZID=Europe/Vienna:${start}
+DTEND;TZID=Europe/Vienna:${end}
 SUMMARY:[${event.location}] - ${event.summary}
 LOCATION:${event.location}
-DESCRIPTION:${event.description || ''}
+DESCRIPTION:${description}
 END:VEVENT`;
             }).join('\n');
 
@@ -457,44 +473,53 @@ VERSION:2.0
 PRODID:-//DrupalCon Vienna 2025//EN
 X-WR-CALNAME:DrupalCon Vienna 2025
 X-WR-TIMEZONE:Europe/Vienna
+BEGIN:VTIMEZONE
+TZID:Europe/Vienna
+BEGIN:STANDARD
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+END:VTIMEZONE
 ${icsEvents}
 END:VCALENDAR`;
         }
 
-        // Download selected events as ICS file
-        function downloadSelectedEvents(events) {
+        // Shared function to trigger ICS download
+        function triggerIcsDownload(events, filename, eventName) {
             const metadata = {
                 total_events: events.length,
                 total_duration: events.reduce((sum, event) => sum + parseInt(event.duration.replace('PT', '').replace('H', '')), 0)
             }
-            window.sa_event?.('download_ics', metadata);
-            const icsContent = generateIcsContent(events);
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'drupalcon-vienna-2025-selected-events.ics';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Add selected events directly to calendar
-        function addToCalendar(events) {
-            const metadata = {
-                total_events: events.length,
-                total_duration: events.reduce((sum, event) => sum + parseInt(event.duration.replace('PT', '').replace('H', '')), 0)
-            }
-            window.sa_event?.('add_to_calendar', metadata);
+            window.sa_event?.(eventName, metadata);
+            
             const icsContent = generateIcsContent(events);
             const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('type', 'text/calendar');
+            link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
+        }
+
+        // Download selected events as ICS file
+        function downloadSelectedEvents(events) {
+            triggerIcsDownload(events, 'drupalcon-vienna-2025-selected-events.ics', 'download_ics');
+        }
+
+        // Add selected events directly to calendar
+        function addToCalendar(events) {
+            triggerIcsDownload(events, 'drupalcon-vienna-2025-selected-events.ics', 'add_to_calendar');
         }
 
         // Display events in the current view
