@@ -1799,6 +1799,16 @@
       "description": "",
       "link": "https://events.drupal.org/vienna2025/session/coffe-break-2-friday",
       "track": "coffee & lunch break time"
+    },
+    {
+      "startTime": "2025-10-15T15:00:00",
+      "endTime": "2025-10-15T15:45:00",
+      "duration": "PT45M",
+      "summary": "Contrib care program: Building a sustainable future for Drupal's essential modules",
+      "location": "Room BoF (-2.62)",
+      "description": "Dezső Biczó (Mxr576)",
+      "link": "https://events.drupal.org/vienna2025/session/contrib-care-program-building-sustainable-future-drupals-essential-modules",
+      "track": "bof"
     }
   ]
 }
