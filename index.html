@@ -792,11 +792,26 @@ END:VCALENDAR`;
                     <div>
                         <h4 class="text-white font-medium mb-2">By Track</h4>
                         ${Object.entries(trackStats)
-                            .map(([track, stats]) => `
-                                <div class="text-white">
-                                    ${stats.duration.toFixed(1)} hours in ${track}
-                                </div>
-                            `).join('')}
+                            .map(([track, stats]) => {
+                                const durationInMinutes = stats.duration * 60;
+                                const hours = Math.floor(stats.duration);
+                                const minutes = Math.round((stats.duration - hours) * 60);
+                                let durationText = '';
+                                
+                                if (hours === 0) {
+                                    durationText = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+                                } else if (minutes === 0) {
+                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''}`;
+                                } else {
+                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+                                }
+                                
+                                return `
+                                    <div class="text-white">
+                                        ${durationText} in ${stats.count} ${stats.count === 1 ? 'event' : 'events'} in ${track}
+                                    </div>
+                                `;
+                            }).join('')}
                     </div>
                     <div class="border-t border-gray-700 pt-4">
                         <h4 class="text-white font-medium mb-2">By Day</h4>
@@ -808,9 +823,21 @@ END:VCALENDAR`;
                                     month: 'long',
                                     day: 'numeric'
                                 });
+                                const hours = Math.floor(stats.duration);
+                                const minutes = Math.round((stats.duration - hours) * 60);
+                                let durationText = '';
+                                
+                                if (hours === 0) {
+                                    durationText = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+                                } else if (minutes === 0) {
+                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''}`;
+                                } else {
+                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+                                }
+                                
                                 return `
                                     <div class="text-white">
-                                        ${stats.duration.toFixed(1)} hours on ${formattedDate}
+                                        ${durationText} in ${stats.count} ${stats.count === 1 ? 'event' : 'events'} on ${formattedDate}
                                     </div>
                                 `;
                             }).join('')}
