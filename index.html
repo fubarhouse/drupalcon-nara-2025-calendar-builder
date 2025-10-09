@@ -791,56 +791,65 @@ END:VCALENDAR`;
                 <div class="space-y-4">
                     <div>
                         <h4 class="text-white font-medium mb-2">By Track</h4>
-                        ${Object.entries(trackStats)
-                            .map(([track, stats]) => {
-                                const durationInMinutes = stats.duration * 60;
-                                const hours = Math.floor(stats.duration);
-                                const minutes = Math.round((stats.duration - hours) * 60);
-                                let durationText = '';
-                                
-                                if (hours === 0) {
-                                    durationText = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
-                                } else if (minutes === 0) {
-                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''}`;
-                                } else {
-                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-                                }
-                                
-                                return `
-                                    <div class="text-white">
-                                        ${durationText} in ${stats.count} ${stats.count === 1 ? 'event' : 'events'} in ${track}
-                                    </div>
-                                `;
-                            }).join('')}
+                        <table class="text-sm text-white">
+                            <tbody>
+                                ${Object.entries(trackStats)
+                                    .map(([track, stats]) => {
+                                        const hours = Math.floor(stats.duration);
+                                        const minutes = Math.round((stats.duration - hours) * 60);
+                                        let durationText = '';
+                                        
+                                        if (hours === 0) {
+                                            durationText = `${minutes}m`;
+                                        } else if (minutes === 0) {
+                                            durationText = `${hours}h`;
+                                        } else {
+                                            durationText = `${hours}h${minutes}m`;
+                                        }
+                                        
+                                        return `
+                                            <tr>
+                                                <td class="pr-3">${track}</td>
+                                                <td class="pr-3 font-mono text-right">${durationText}</td>
+                                                <td>${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                            </tbody>
+                        </table>
                     </div>
                     <div class="border-t border-gray-700 pt-4">
                         <h4 class="text-white font-medium mb-2">By Day</h4>
-                        ${sortedDates
-                            .map(date => {
-                                const stats = dailyStats[date];
-                                const formattedDate = new Date(date).toLocaleDateString('en-US', {
-                                    weekday: 'long',
-                                    month: 'long',
-                                    day: 'numeric'
-                                });
-                                const hours = Math.floor(stats.duration);
-                                const minutes = Math.round((stats.duration - hours) * 60);
-                                let durationText = '';
-                                
-                                if (hours === 0) {
-                                    durationText = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
-                                } else if (minutes === 0) {
-                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''}`;
-                                } else {
-                                    durationText = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-                                }
-                                
-                                return `
-                                    <div class="text-white">
-                                        ${durationText} in ${stats.count} ${stats.count === 1 ? 'event' : 'events'} on ${formattedDate}
-                                    </div>
-                                `;
-                            }).join('')}
+                        <table class="text-sm text-white">
+                            <tbody>
+                                ${sortedDates
+                                    .map(date => {
+                                        const stats = dailyStats[date];
+                                        const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                                            weekday: 'long'
+                                        });
+                                        const hours = Math.floor(stats.duration);
+                                        const minutes = Math.round((stats.duration - hours) * 60);
+                                        let durationText = '';
+                                        
+                                        if (hours === 0) {
+                                            durationText = `${minutes}m`;
+                                        } else if (minutes === 0) {
+                                            durationText = `${hours}h`;
+                                        } else {
+                                            durationText = `${hours}h${minutes}m`;
+                                        }
+                                        
+                                        return `
+                                            <tr>
+                                                <td class="pr-3">${formattedDate}</td>
+                                                <td class="pr-3 font-mono text-right">${durationText}</td>
+                                                <td>${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             `;
