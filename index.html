@@ -96,22 +96,25 @@
         </div>
 
         <!-- Selection Overview Panel -->
-        <div id="selectionOverview" class="fixed bottom-0 left-0 right-0 bg-black shadow-lg border-t border-gray-200 p-4 transform transition-transform duration-300 translate-y-full">
-            <div class="container mx-auto">
-                <div class="space-y-4">
-                    <div>
-                        <a id="toggleDetails" class="flex justify-between text-white hover:text-gray-300 text-sm font-medium items-center hover:cursor-pointer">
-                            <span>Selected sessions: <span id="totalEvents">0</span> sessions in <span id="totalDuration">0 hours</span> (expand to see details)</span>
-                            <i class="fas fa-chevron-up transform transition-transform duration-200"></i>
-                        </a>
-                        <div id="stageDetails" class="mt-4 pb-8 hidden">
-                            <div class="border-t border-b border-gray-700 py-4">
-                                <div id="stageStats" class="space-y-2">
-                                    <!-- Stage statistics will be inserted here -->
-                                </div>
-                            </div>
+        <div id="selectionOverview" class="fixed bottom-0 left-0 right-0 bg-black shadow-lg border-t border-gray-200 transform transition-transform duration-300 translate-y-full z-50 max-h-[90vh] flex flex-col">
+            <div class="container mx-auto flex flex-col flex-1 min-h-0">
+                <!-- Sticky top bar -->
+                <div class="p-0">
+                    <a id="toggleDetails" class="flex p-4 pb-2 justify-between text-white hover:text-gray-300 text-sm font-medium items-center hover:cursor-pointer">
+                        <span>Selected sessions: <span id="totalEvents">0</span> sessions in <span id="totalDuration">0 hours</span> (expand to see details)</span>
+                        <i class="fas fa-chevron-up transform transition-transform duration-200"></i>
+                    </a>
+                </div>
+                <!-- Scrollable content area (only expanded details) -->
+                <div id="stageDetails" class="overflow-y-auto flex-1 mt-4 px-4 hidden">
+                    <div class="border-t border-b border-gray-700 py-4">
+                        <div id="stageStats" class="space-y-2">
+                            <!-- Stage statistics will be inserted here -->
                         </div>
                     </div>
+                </div>
+                <!-- Sticky button area -->
+                <div class="p-4 border-t border-gray-700">
                     <div class="flex space-x-4">
                         <button id="downloadIcs" class="drupal-blue text-white px-4 py-2 rounded-md drupal-blue-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <i class="fas fa-download mr-2"></i>Download ICS
