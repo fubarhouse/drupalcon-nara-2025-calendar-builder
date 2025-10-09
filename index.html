@@ -79,6 +79,19 @@
                         </select>
                     </div>
                 </div>
+                
+                <!-- Action buttons -->
+                <div class="flex flex-wrap gap-2 pt-2 border-t border-gray-200">
+                    <button id="resetFilters" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-redo mr-2"></i>Reset filters
+                    </button>
+                    <button id="selectAllDisplayed" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-check-square mr-2"></i>Select all
+                    </button>
+                    <button id="deselectAllDisplayed" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-square mr-2"></i>Deselect all
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -207,6 +220,7 @@
             const savedSelections = localStorage.getItem('drupalconSelectedEvents');
             window.selectedEvents = new Set(savedSelections ? JSON.parse(savedSelections) : []);
             window.allEvents = events; // Store all events for reference
+            window.displayedEvents = events; // Initially all events are displayed
 
             // Show selection overview panel and enable buttons if there are saved selections
             if (window.selectedEvents.size > 0) {
@@ -256,6 +270,11 @@
             document.getElementById('selectionFilter').addEventListener('change', () => filterEvents(events, 'selectionFilter'));
             document.getElementById('downloadIcs').addEventListener('click', () => downloadSelectedEvents(events));
             
+            // Add action button listeners
+            document.getElementById('resetFilters').addEventListener('click', () => resetFilters(events));
+            document.getElementById('selectAllDisplayed').addEventListener('click', () => selectAllDisplayed(events));
+            document.getElementById('deselectAllDisplayed').addEventListener('click', () => deselectAllDisplayed(events));
+            
             // Add toggle details event listener
             document.getElementById('toggleDetails').addEventListener('click', () => {
                 const detailsSection = document.getElementById('stageDetails');
@@ -302,6 +321,8 @@
                 return matchesDate && matchesTrack && matchesKeywords && matchesSelection;
             });
 
+            // Store currently displayed events for select/deselect all functions
+            window.displayedEvents = filteredEvents;
             
             displayEvents(filteredEvents);
         }
@@ -330,6 +351,73 @@
             toggleClearButton();
             // Trigger filtering without analytics (since user is clearing)
             filterEvents(events, null, true);
+        }
+
+        // Reset all filters
+        function resetFilters(events) {
+            window.sa_event?.('reset_filters');
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('trackFilter').value = '';
+            document.getElementById('keywordsFilter').value = '';
+            document.getElementById('selectionFilter').value = 'all';
+            toggleClearButton();
+            filterEvents(events, null, true);
+        }
+
+        // Select all currently displayed events
+        function selectAllDisplayed(events) {
+            const displayedEvents = window.displayedEvents || events;
+            let addedCount = 0;
+            
+            displayedEvents.forEach(event => {
+                if (!window.selectedEvents.has(event.id)) {
+                    window.selectedEvents.add(event.id);
+                    addedCount++;
+                }
+            });
+            
+            if (addedCount > 0) {
+                window.sa_event?.('select_all_displayed', {
+                    count: addedCount
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('drupalconSelectedEvents', JSON.stringify([...window.selectedEvents]));
+                
+                updateDownloadButton();
+                updateSelectionOverview(window.allEvents);
+                
+                // Re-filter events to update the view
+                filterEvents(window.allEvents);
+            }
+        }
+
+        // Deselect all currently displayed events
+        function deselectAllDisplayed(events) {
+            const displayedEvents = window.displayedEvents || events;
+            let removedCount = 0;
+            
+            displayedEvents.forEach(event => {
+                if (window.selectedEvents.has(event.id)) {
+                    window.selectedEvents.delete(event.id);
+                    removedCount++;
+                }
+            });
+            
+            if (removedCount > 0) {
+                window.sa_event?.('deselect_all_displayed', {
+                    count: removedCount
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('drupalconSelectedEvents', JSON.stringify([...window.selectedEvents]));
+                
+                updateDownloadButton();
+                updateSelectionOverview(window.allEvents);
+                
+                // Re-filter events to update the view
+                filterEvents(window.allEvents);
+            }
         }
 
         // Update download button state
