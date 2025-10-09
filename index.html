@@ -280,7 +280,6 @@
             
             // Add toggle details event listener
             document.getElementById('toggleDetails').addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent bubbling to selectionOverview
                 const detailsSection = document.getElementById('stageDetails');
                 const toggleIcon = document.querySelector('#toggleDetails i');
                 if (detailsSection.classList.contains('hidden')) {
@@ -292,22 +291,6 @@
                     detailsSection.classList.add('hidden');
                     toggleIcon.classList.remove('rotate-180');
                 }
-            });
-            
-            // Close details pane when clicking anywhere on the panel (except download button and toggle)
-            document.getElementById('selectionOverview').addEventListener('click', (e) => {
-                const detailsSection = document.getElementById('stageDetails');
-                const toggleIcon = document.querySelector('#toggleDetails i');
-                
-                // Don't close if clicking the download button, toggle button, or if details are already hidden
-                if (e.target.closest('#downloadIcs') || e.target.closest('#toggleDetails') || detailsSection.classList.contains('hidden')) {
-                    return;
-                }
-                
-                // Close the details
-                window.sa_event?.('selection_details_closed');
-                detailsSection.classList.add('hidden');
-                toggleIcon.classList.remove('rotate-180');
             });
         }
 
@@ -760,14 +743,15 @@ END:VCALENDAR`;
             const stageStatsContainer = document.getElementById('stageStats');
             const selectedEvents = window.allEvents.filter(event => window.selectedEvents.has(event.id));
             
-            // Calculate daily statistics
+            // Calculate daily statistics with track breakdown
             const dailyStats = {};
             selectedEvents.forEach(event => {
                 const date = event.startTime.split('T')[0];
                 if (!dailyStats[date]) {
                     dailyStats[date] = {
                         count: 0,
-                        duration: 0
+                        duration: 0,
+                        tracks: {}
                     };
                 }
                 dailyStats[date].count++;
@@ -779,15 +763,26 @@ END:VCALENDAR`;
                 const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
                 const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
                 dailyStats[date].duration += hours + (minutes / 60);
+                
+                // Track breakdown per day
+                if (!dailyStats[date].tracks[event.track]) {
+                    dailyStats[date].tracks[event.track] = {
+                        count: 0,
+                        duration: 0
+                    };
+                }
+                dailyStats[date].tracks[event.track].count++;
+                dailyStats[date].tracks[event.track].duration += hours + (minutes / 60);
             });
 
-            // Calculate track statistics
+            // Calculate track statistics with day breakdown
             const trackStats = {};
             selectedEvents.forEach(event => {
                 if (!trackStats[event.track]) {
                     trackStats[event.track] = {
                         count: 0,
-                        duration: 0
+                        duration: 0,
+                        days: {}
                     };
                 }
                 trackStats[event.track].count++;
@@ -799,6 +794,17 @@ END:VCALENDAR`;
                 const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
                 const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
                 trackStats[event.track].duration += hours + (minutes / 60);
+                
+                // Day breakdown per track
+                const date = event.startTime.split('T')[0];
+                if (!trackStats[event.track].days[date]) {
+                    trackStats[event.track].days[date] = {
+                        count: 0,
+                        duration: 0
+                    };
+                }
+                trackStats[event.track].days[date].count++;
+                trackStats[event.track].days[date].duration += hours + (minutes / 60);
             });
 
             // Sort dates
@@ -812,7 +818,7 @@ END:VCALENDAR`;
                             <tbody>
                                 ${Object.entries(trackStats)
                                     .sort((a, b) => b[1].count - a[1].count)
-                                    .map(([track, stats]) => {
+                                    .map(([track, stats], index) => {
                                         const hours = Math.floor(stats.duration);
                                         const minutes = Math.round((stats.duration - hours) * 60);
                                         let durationText = '';
@@ -825,11 +831,51 @@ END:VCALENDAR`;
                                             durationText = `${hours}h${minutes}m`;
                                         }
                                         
+                                        // Generate day breakdown for this track (sorted chronologically)
+                                        const dayBreakdown = Object.entries(stats.days)
+                                            .sort((a, b) => a[0].localeCompare(b[0]))
+                                            .map(([date, dayStats]) => {
+                                                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                                                    weekday: 'long'
+                                                });
+                                                const dayHours = Math.floor(dayStats.duration);
+                                                const dayMinutes = Math.round((dayStats.duration - dayHours) * 60);
+                                                let dayDurationText = '';
+                                                
+                                                if (dayHours === 0) {
+                                                    dayDurationText = `${dayMinutes}m`;
+                                                } else if (dayMinutes === 0) {
+                                                    dayDurationText = `${dayHours}h`;
+                                                } else {
+                                                    dayDurationText = `${dayHours}h${dayMinutes}m`;
+                                                }
+                                                
+                                                return `
+                                                    <tr>
+                                                        <td class="pr-3 pl-6">${formattedDate}</td>
+                                                        <td class="pr-3 font-mono text-right">${dayDurationText}</td>
+                                                        <td>${dayStats.count} ${dayStats.count === 1 ? 'event' : 'events'}</td>
+                                                    </tr>
+                                                `;
+                                            }).join('');
+                                        
                                         return `
-                                            <tr>
-                                                <td class="pr-3">${track}</td>
+                                            <tr class="cursor-pointer hover:bg-gray-700 hover:bg-opacity-30 transition-colors" onclick="toggleTrackExpansion('track-${index}')">
+                                                <td class="pr-3">
+                                                    <i id="track-${index}-icon" class="fas fa-chevron-right mr-2 text-xs transition-transform"></i>
+                                                    ${track}
+                                                </td>
                                                 <td class="pr-3 font-mono text-right">${durationText}</td>
                                                 <td>${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
+                                            </tr>
+                                            <tr id="track-${index}-details" class="hidden">
+                                                <td colspan="3">
+                                                    <table class="w-full">
+                                                        <tbody>
+                                                            ${dayBreakdown}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
                                             </tr>
                                         `;
                                     }).join('')}
@@ -841,7 +887,7 @@ END:VCALENDAR`;
                         <table class="text-sm text-white">
                             <tbody>
                                 ${sortedDates
-                                    .map(date => {
+                                    .map((date, index) => {
                                         const stats = dailyStats[date];
                                         const formattedDate = new Date(date).toLocaleDateString('en-US', {
                                             weekday: 'long'
@@ -858,11 +904,48 @@ END:VCALENDAR`;
                                             durationText = `${hours}h${minutes}m`;
                                         }
                                         
+                                        // Generate track breakdown for this day
+                                        const trackBreakdown = Object.entries(stats.tracks)
+                                            .sort((a, b) => b[1].count - a[1].count)
+                                            .map(([track, trackStats]) => {
+                                                const trackHours = Math.floor(trackStats.duration);
+                                                const trackMinutes = Math.round((trackStats.duration - trackHours) * 60);
+                                                let trackDurationText = '';
+                                                
+                                                if (trackHours === 0) {
+                                                    trackDurationText = `${trackMinutes}m`;
+                                                } else if (trackMinutes === 0) {
+                                                    trackDurationText = `${trackHours}h`;
+                                                } else {
+                                                    trackDurationText = `${trackHours}h${trackMinutes}m`;
+                                                }
+                                                
+                                                return `
+                                                    <tr>
+                                                        <td class="pr-3 pl-6">${track}</td>
+                                                        <td class="pr-3 font-mono text-right">${trackDurationText}</td>
+                                                        <td>${trackStats.count} ${trackStats.count === 1 ? 'event' : 'events'}</td>
+                                                    </tr>
+                                                `;
+                                            }).join('');
+                                        
                                         return `
-                                            <tr>
-                                                <td class="pr-3">${formattedDate}</td>
+                                            <tr class="cursor-pointer hover:bg-gray-700 hover:bg-opacity-30 transition-colors" onclick="toggleDayExpansion('day-${index}')">
+                                                <td class="pr-3">
+                                                    <i id="day-${index}-icon" class="fas fa-chevron-right mr-2 text-xs transition-transform"></i>
+                                                    ${formattedDate}
+                                                </td>
                                                 <td class="pr-3 font-mono text-right">${durationText}</td>
-                                                <td class="font-mono">${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
+                                                <td>${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
+                                            </tr>
+                                            <tr id="day-${index}-details" class="hidden">
+                                                <td colspan="3">
+                                                    <table class="w-full">
+                                                        <tbody>
+                                                            ${trackBreakdown}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
                                             </tr>
                                         `;
                                     }).join('')}
@@ -871,6 +954,34 @@ END:VCALENDAR`;
                     </div>
                 </div>
             `;
+        }
+        
+        // Toggle day expansion in selection details
+        function toggleDayExpansion(dayId) {
+            const detailsDiv = document.getElementById(`${dayId}-details`);
+            const icon = document.getElementById(`${dayId}-icon`);
+            
+            if (detailsDiv.classList.contains('hidden')) {
+                detailsDiv.classList.remove('hidden');
+                icon.classList.add('rotate-90');
+            } else {
+                detailsDiv.classList.add('hidden');
+                icon.classList.remove('rotate-90');
+            }
+        }
+        
+        // Toggle track expansion in selection details
+        function toggleTrackExpansion(trackId) {
+            const detailsDiv = document.getElementById(`${trackId}-details`);
+            const icon = document.getElementById(`${trackId}-icon`);
+            
+            if (detailsDiv.classList.contains('hidden')) {
+                detailsDiv.classList.remove('hidden');
+                icon.classList.add('rotate-90');
+            } else {
+                detailsDiv.classList.add('hidden');
+                icon.classList.remove('rotate-90');
+            }
         }
 
         // Initialize the application when the page loads
