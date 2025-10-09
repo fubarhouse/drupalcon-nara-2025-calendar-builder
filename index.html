@@ -708,7 +708,7 @@ END:VCALENDAR`;
                                                     ${event.location ? `<p class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-1"></i>${highlightedLocation}</p>` : ''}
                                                     ${event.link ? `<p class="text-sm drupal-blue-text mb-1"><a href="${event.link}" target="_blank" class="hover:underline" onclick="event.stopPropagation()">View Session Details <i class="fas fa-external-link-alt ml-1"></i></a></p>` : ''}
                                                     <p class="text-sm text-gray-600 mb-1">${fullDateTime}</p>
-                                                    ${event.description ? `<p class="text-sm text-gray-700 mb-1 line-clamp-2">${highlightedDescription}</p>` : ''}
+                                                    ${event.description ? `<p class="text-sm text-gray-700 mb-1">${highlightedDescription}</p>` : ''}
                                                     <p class="text-xs text-gray-600 bg-white bg-opacity-60 px-2 py-1 rounded inline-block">${highlightedTrack}</p>
                                                 </div>
                                             </div>
