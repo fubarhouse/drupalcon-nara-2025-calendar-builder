@@ -32,7 +32,7 @@
         </div>
     </header>
 
-    <div class="container mx-auto px-4 py-8">
+    <div class="container-full mx-auto px-4 py-8">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 mb-2">Usage Instructions</h2>
             <ul class="list-disc list-inside text-gray-600">
@@ -636,6 +636,11 @@ END:VCALENDAR`;
                 // Iterate through each time slot
                 Object.entries(eventsByStartTime).forEach(([startTime, timeSlotEvents], index) => {
                     const startDate = new Date(startTime);
+                    const displayDate = startDate.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric'
+                    });
                     const displayTime = startDate.toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit'
@@ -653,7 +658,7 @@ END:VCALENDAR`;
                     // Create a row container for events at this time (responsive grid)
                     dateHtml += `
                         <div class="mb-4">
-                            <div class="sticky top-0 z-10 bg-gray-100 text-sm font-semibold text-gray-600 mb-2 py-2 -mx-4 px-4">From ${displayTime}</div>
+                            <div class="sticky top-0 z-10 bg-gray-100 text-sm font-semibold text-gray-600 mb-2 py-2 -mx-4 px-4">${displayDate}, from ${displayTime}</div>
                             <div class="${gridCols}">
                                 ${timeSlotEvents.map(event => {
                                     const isSelected = window.selectedEvents.has(event.id);
@@ -676,7 +681,7 @@ END:VCALENDAR`;
                                         minute: '2-digit'
                                     });
                                     
-                                    const fullDateTime = `${dayDate} - ${startTime} - ${endTime}`;
+                                    const fullDateTime = `${dayDate}.<br><strong>${startTime} - ${endTime}</strong>`;
                                     
                                     // Apply keyword highlighting to relevant fields
                                     const highlightedSummary = highlightKeywords(event.summary, keywordsFilter);
