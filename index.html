@@ -107,7 +107,7 @@
                 </div>
                 <!-- Scrollable content area (only expanded details) -->
                 <div id="stageDetails" class="overflow-y-auto flex-1 mt-4 px-4 hidden">
-                    <div class="border-t border-b border-gray-700 py-4">
+                    <div class="border-t border-gray-700 py-4">
                         <div id="stageStats" class="space-y-2">
                             <!-- Stage statistics will be inserted here -->
                         </div>
@@ -793,13 +793,8 @@ END:VCALENDAR`;
                         <h4 class="text-white font-medium mb-2">By Track</h4>
                         ${Object.entries(trackStats)
                             .map(([track, stats]) => `
-                                <div class="flex justify-between items-center">
-                                    <span class="text-white">${track}</span>
-                                    <div class="text-sm text-gray-400">
-                                        <span>${stats.count} events</span>
-                                        <span class="mx-2">•</span>
-                                        <span>${stats.duration.toFixed(1)} hours</span>
-                                    </div>
+                                <div class="text-white">
+                                    ${stats.duration.toFixed(1)} hours in ${track}
                                 </div>
                             `).join('')}
                     </div>
@@ -809,18 +804,13 @@ END:VCALENDAR`;
                             .map(date => {
                                 const stats = dailyStats[date];
                                 const formattedDate = new Date(date).toLocaleDateString('en-US', {
-                                    weekday: 'short',
-                                    month: 'short',
+                                    weekday: 'long',
+                                    month: 'long',
                                     day: 'numeric'
                                 });
                                 return `
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-white">${formattedDate}</span>
-                                        <div class="text-sm text-gray-400">
-                                            <span>${stats.count} events</span>
-                                            <span class="mx-2">•</span>
-                                            <span>${stats.duration.toFixed(1)} hours</span>
-                                        </div>
+                                    <div class="text-white">
+                                        ${stats.duration.toFixed(1)} hours on ${formattedDate}
                                     </div>
                                 `;
                             }).join('')}
