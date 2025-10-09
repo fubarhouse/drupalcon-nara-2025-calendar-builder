@@ -1809,6 +1809,16 @@
       "description": "Dezső Biczó (Mxr576)",
       "link": "https://events.drupal.org/vienna2025/session/contrib-care-program-building-sustainable-future-drupals-essential-modules",
       "track": "bof"
+    },
+    {
+      "startTime": "2025-10-15T11:30:00",
+      "endTime": "2025-10-15T12:15:00",
+      "duration": "PT45M",
+      "summary": "Drupalcamp England",
+      "location": "Room BoF (-2.66)",
+      "description": "",
+      "link": "https://events.drupal.org/vienna2025/session/drupalcamp-england",
+      "track": "bof"
     }
   ]
 }
