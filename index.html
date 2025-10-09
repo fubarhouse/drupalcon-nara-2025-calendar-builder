@@ -279,7 +279,8 @@
             document.getElementById('deselectAllDisplayed').addEventListener('click', () => deselectAllDisplayed(events));
             
             // Add toggle details event listener
-            document.getElementById('toggleDetails').addEventListener('click', () => {
+            document.getElementById('toggleDetails').addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent bubbling to selectionOverview
                 const detailsSection = document.getElementById('stageDetails');
                 const toggleIcon = document.querySelector('#toggleDetails i');
                 if (detailsSection.classList.contains('hidden')) {
@@ -291,6 +292,22 @@
                     detailsSection.classList.add('hidden');
                     toggleIcon.classList.remove('rotate-180');
                 }
+            });
+            
+            // Close details pane when clicking anywhere on the panel (except download button and toggle)
+            document.getElementById('selectionOverview').addEventListener('click', (e) => {
+                const detailsSection = document.getElementById('stageDetails');
+                const toggleIcon = document.querySelector('#toggleDetails i');
+                
+                // Don't close if clicking the download button, toggle button, or if details are already hidden
+                if (e.target.closest('#downloadIcs') || e.target.closest('#toggleDetails') || detailsSection.classList.contains('hidden')) {
+                    return;
+                }
+                
+                // Close the details
+                window.sa_event?.('selection_details_closed');
+                detailsSection.classList.add('hidden');
+                toggleIcon.classList.remove('rotate-180');
             });
         }
 
@@ -794,6 +811,7 @@ END:VCALENDAR`;
                         <table class="text-sm text-white">
                             <tbody>
                                 ${Object.entries(trackStats)
+                                    .sort((a, b) => b[1].count - a[1].count)
                                     .map(([track, stats]) => {
                                         const hours = Math.floor(stats.duration);
                                         const minutes = Math.round((stats.duration - hours) * 60);
@@ -844,7 +862,7 @@ END:VCALENDAR`;
                                             <tr>
                                                 <td class="pr-3">${formattedDate}</td>
                                                 <td class="pr-3 font-mono text-right">${durationText}</td>
-                                                <td>${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
+                                                <td class="font-mono">${stats.count} ${stats.count === 1 ? 'event' : 'events'}</td>
                                             </tr>
                                         `;
                                     }).join('')}
