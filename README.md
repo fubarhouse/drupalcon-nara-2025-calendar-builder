@@ -2,6 +2,8 @@
 
 A simple _"web application"_ for building personalized schedules for DrupalCon Vienna 2025.  
 
+[See the app in action on GitHub Pages.](https://aboros.github.io/drupalcon-vienna-2025-calendar-builder/)
+
 ## Features
 
 - **Browse Sessions**: View all DrupalCon Vienna 2025 sessions and events
