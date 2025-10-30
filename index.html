@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrupalCon Vienna 2025 - Custom Schedule Builder</title>
+    <title>DrupalCon Nara 2025 - Custom Schedule Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -26,7 +26,7 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold">DrupalCon Vienna 2025 - Custom Schedule Builder</h1>
+                    <h1 class="text-2xl font-bold">DrupalCon Nara 2025 - Custom Schedule Builder</h1>
                 </div>
             </div>
         </div>
@@ -129,7 +129,7 @@
             <!-- Events will be dynamically inserted here -->
         </div>
         <div id="creditsContainer" class="text-center p-4 mb-24">
-            <p class="text-sm text-gray-600">This is a custom schedule builder for <a href="https://events.drupal.org/vienna2025" target="_blank" class="drupal-blue-text">DrupalCon Vienna 2025</a>. It is not affiliated with DrupalCon Vienna 2025.</p>
+            <p class="text-sm text-gray-600">This is a custom schedule builder for <a href="https://events.drupal.org/nara2025" target="_blank" class="drupal-blue-text">DrupalCon Nara 2025</a>. It is not affiliated with DrupalCon Nara 2025.</p>
             <p class="text-sm text-gray-600 my-2">Proudly built by <a href="https://www.drupal.org/u/aboros" target="_blank" class="drupal-blue-text">aboros</a> from pure love of <a href="https://www.drupal.org" target="_blank" class="drupal-blue-text">Drupal</a>.</p>
             <p class="text-sm text-gray-600">No tracking, no cookies, no data collection. 100% privacy-first analytics.</p>
         </div>
@@ -141,14 +141,14 @@
             try {
                 const response = await fetch('data/events.json');
                 const data = await response.json();
-                data.events.forEach(event => {
+                data.items.forEach(event => {
                     event.clean_title = event.summary
                         .toLowerCase()
                         .replace(/[^a-z0-9]/g, '_')
                         .replace(/_+/g, '_')
                         .replace(/^_|_$/g, '');
                 });
-                return data.events;
+                return data.items;
             } catch (error) {
                 
                 return [];
@@ -504,10 +504,10 @@
             filterEvents(window.allEvents);
         }
 
-        // Helper function to format date for ICS in Vienna timezone
+        // Helper function to format date for ICS in Tokyo timezone
         function formatDateForICS(dateString) {
             // Parse the ISO date string directly to avoid timezone conversion issues
-            // The source data is in Vienna time, so we preserve it as-is
+            // The source data is in Tokyo time, so we preserve it as-is
             // Format: "2025-10-14T09:30:00" -> "20251014T093000"
             return dateString.replace(/[-:]/g, '').replace(/\.\d+/, '');
         }
@@ -521,7 +521,7 @@
                 const end = formatDateForICS(event.endTime);
                 
                 // Generate a unique UID for the event
-                const uid = `${event.id}@drupalcon-vienna-2025`;
+                const uid = `${event.id}@drupalcon-nara-2025`;
                 
                 // Escape special characters in description for ICS format
                 // Add URL before the description
@@ -530,8 +530,8 @@
                 
                 return `BEGIN:VEVENT
 UID:${uid}
-DTSTART;TZID=Europe/Vienna:${start}
-DTEND;TZID=Europe/Vienna:${end}
+DTSTART;TZID=Asia/Tokyo:${start}
+DTEND;TZID=Asia/Tokyo:${end}
 SUMMARY:${event.summary}
 LOCATION:${event.location}
 DESCRIPTION:${description}
@@ -540,24 +540,9 @@ END:VEVENT`;
 
             return `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//DrupalCon Vienna 2025//EN
-X-WR-CALNAME:DrupalCon Vienna 2025
-X-WR-TIMEZONE:Europe/Vienna
-BEGIN:VTIMEZONE
-TZID:Europe/Vienna
-BEGIN:STANDARD
-DTSTART:19701025T030000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-TZOFFSETFROM:+0200
-TZOFFSETTO:+0100
-END:STANDARD
-BEGIN:DAYLIGHT
-DTSTART:19700329T020000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0200
-END:DAYLIGHT
-END:VTIMEZONE
+PRODID:-//DrupalCon Nara 2025//EN
+X-WR-CALNAME:DrupalCon Nara 2025
+X-WR-TIMEZONE:Asia/Tokyo
 ${icsEvents}
 END:VCALENDAR`;
         }
@@ -584,7 +569,7 @@ END:VCALENDAR`;
 
         // Download selected events as ICS file
         function downloadSelectedEvents(events) {
-            triggerIcsDownload(events, 'drupalcon-vienna-2025-selected-events.ics', 'download_ics');
+            triggerIcsDownload(events, 'drupalcon-nara-2025-selected-events.ics', 'download_ics');
         }
 
         // Display events in the current view
