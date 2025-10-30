@@ -4,7 +4,7 @@
 
 > **🙏 Respect & credit 🙏**
 >
-> This project is a direct copy of [https://github.com/aboros/drupalcon-vienna-2025-calendar-builder](Adam Boros's Vienna Calendar Builder) which is catered to DrupalCon Nara 2025 using a custom scraper not yet made public.
+> This project is a direct copy of [Adam Boros's Vienna Calendar Builder](https://github.com/aboros/drupalcon-vienna-2025-calendar-builder) which is catered to DrupalCon Nara 2025 using a custom scraper not yet made public.
 >
 > Please make sure you show your gratitude to Adam Boros for their work!
 
