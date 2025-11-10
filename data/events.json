@@ -11,6 +11,18 @@
   },
   "items": [
     {
+      "startTime": "2025-11-16T12:30:00Z",
+      "endTime": "2025-11-16T15:40:00Z",
+      "duration": "PT3H10M",
+      "summary": "DrupalCon Nara Treasure Hunt",
+      "location": "Location Nara City Visitor's Centre",
+      "description": "Explore the beauty, fun, and nature of Nara City with your friends and family while completing challenges and collecting points, so that you might receive the title of the Ultimate Treasure Hunter.",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/drupalcon-nara-treasure-hunt",
+      "track": "",
+      "speakers": null,
+      "timezone": ""
+    },
+    {
       "startTime": "2025-11-17T08:30:00Z",
       "endTime": "2025-11-17T09:30:00Z",
       "duration": "PT1H",
@@ -19,7 +31,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/registration",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T09:30:00Z",
@@ -34,7 +47,8 @@
         "Gen Nakagawa",
         "Michael Richardson",
         "Masami"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T09:55:00Z",
@@ -47,7 +61,8 @@
       "track": "",
       "speakers": [
         "Dries Buytaert"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T10:00:00Z",
@@ -58,7 +73,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/general-contribution-day-1",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T10:55:00Z",
@@ -69,7 +85,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/group-photo",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T11:05:00Z",
@@ -80,7 +97,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/morning-break",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T11:25:00Z",
@@ -94,7 +112,8 @@
       "speakers": [
         "pameeela",
         "ckrina"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T11:25:00Z",
@@ -107,7 +126,8 @@
       "track": "leadership and business / リーダーシップ、ビジネス",
       "speakers": [
         "ken_taguchi"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T11:25:00Z",
@@ -120,7 +140,8 @@
       "track": "leadership and business / リーダーシップ、ビジネス",
       "speakers": [
         "nielsaers"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T11:50:00Z",
@@ -133,7 +154,8 @@
       "track": "community health / コミュニティヘルス",
       "speakers": [
         "shinmaikeru"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T12:10:00Z",
@@ -144,7 +166,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/lunch",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T13:10:00Z",
@@ -157,7 +180,8 @@
       "track": "drupal cms",
       "speakers": [
         "dreambubbler"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T13:10:00Z",
@@ -170,7 +194,8 @@
       "track": "ux, accessibility, and design / ux、アクセシビリティ、デザイン",
       "speakers": [
         "elliott.mower"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T13:10:00Z",
@@ -183,12 +208,13 @@
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "kazukomurata"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T14:10:00Z",
-      "endTime": "2025-11-17T14:55:00Z",
-      "duration": "PT45M",
+      "endTime": "2025-11-17T14:30:00Z",
+      "duration": "PT20M",
       "summary": "Beyond Iframes: Modern Embedding in Drupal with Media and oEmbed",
       "location": "Location Hiten A",
       "description": "oEmbed is a well established format, however ever evolving content usage policies and security restrictions are preventing site builders from using iFrames to inject external content from sources such as YouTube, Instagram, X, and many social networks and content providers.",
@@ -196,7 +222,8 @@
       "track": "site building / サイト構築",
       "speakers": [
         "pcambra"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T14:10:00Z",
@@ -209,21 +236,37 @@
       "track": "content and marketing / コンテンツとマーケティング",
       "speakers": [
         "saxenaakansha30"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T14:10:00Z",
       "endTime": "2025-11-17T14:40:00Z",
       "duration": "PT30M",
-      "summary": "グローバル戦略と現場実行を繋いでいく：日本拠点のDrupal導入の事例",
+      "summary": "ネスレグループ日本拠点のDrupal導入の事例： グローバル戦略と現場の運用を繋いでいく",
       "location": "Location Hiten C/D",
-      "description": "前半では日本拠点でのDrupal導入における課題や取り組みを紹介し、後半はグローバルDXPにおけるアジリティ実現をテーマに対談します。実務担当者の視点からの知見を共有します。",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/kuroharuzhanetoxianchangshixingwojiiteikuribenjudiannodrupaldaorunoshili",
+      "description": "前半では日本拠点でのDrupal導入における課題や取り組みを紹介し、後半はグローバルDXPにおけるアジリティ実現をテーマにネスレ日本の担当者の方と対談します。実務担当者の視点からの知見を共有します。",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/nesurekurufuribenjudiannodrupaldaorunoshili",
       "track": "sponsored session",
       "speakers": [
         "taishi",
         "Kozo Takada"
-      ]
+      ],
+      "timezone": ""
+    },
+    {
+      "startTime": "2025-11-17T14:35:00Z",
+      "endTime": "2025-11-17T14:55:00Z",
+      "duration": "PT20M",
+      "summary": "Drupal Asia Steering Committee Panel",
+      "location": "Location Hiten A",
+      "description": "Come and chat to the organisers of DrupalCons in Asia",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/drupal-asia-steering-committee-panel",
+      "track": "",
+      "speakers": [
+        "Michael Richardson"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T14:55:00Z",
@@ -234,34 +277,37 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/afternoon-break",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T15:15:00Z",
       "endTime": "2025-11-17T15:35:00Z",
       "duration": "PT20M",
       "summary": "Drupalプロジェクトの成功は、プロジェクトマネージャー・スクラムマスター・UXデザイナーの力で加速する―多様な視点を巻き込むMeetupNaraの挑戦―",
-      "location": "Location Hiten C/D",
+      "location": "Location Hiten B",
       "description": "Drupalは高機能なCMSとして多くの実績を持つ一方で、日本では「技術者向け」「専門的すぎる」という印象を持たれがちです。しかし実際には、プロジェクトマネージャー（PM）、スクラムマスター（SM）、UXデザイナー、コンテンツプランナーなど、多様な職種が関わり合いながらプロジェクトを成功に導いています。",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session",
       "track": "community health / コミュニティヘルス",
       "speakers": [
         "Miki Yoshida",
         "Misako Fukagawa"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T15:15:00Z",
-      "endTime": "2025-11-17T15:30:00Z",
-      "duration": "PT15M",
-      "summary": "Epic things you built with Drupal AI",
-      "location": "Location Hiten B",
-      "description": "Curious about how AI is actually being used in the wild? Join Michael for an in-depth look at the awesome things that have been built with Drupal AI. This session gives an overview of actual running Drupal AI Implementations, how they work, and what we can learn from them.",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/epic-things-you-built-drupal-ai",
+      "endTime": "2025-11-17T15:45:00Z",
+      "duration": "PT30M",
+      "summary": "Session by Fastly",
+      "location": "Location Hiten C/D",
+      "description": "",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/session-fastly",
       "track": "sponsored session",
       "speakers": [
-        "schnitzel"
-      ]
+        "N A"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T15:15:00Z",
@@ -269,38 +315,27 @@
       "duration": "PT45M",
       "summary": "Zero-downtime Drupal deployment with Kamal",
       "location": "Location Hiten A",
-      "description": "You've built an amazing Drupal site ready to deploy. You want your deployments error-free, auto-scale and future-proof. Yet, you are almost on your own, and Kubernetes is quite a beast to tame!",
+      "description": "You've built an amazing Drupal site ready to deploy. You want your deployments zero downtime, error-free, scalable, and future-proof. Yet, you are almost on your own, and Kubernetes is quite a beast to tame!",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/zero-downtime-drupal-deployment-kamal",
       "track": "devops",
       "speakers": [
         "hktang"
-      ]
-    },
-    {
-      "startTime": "2025-11-17T15:30:00Z",
-      "endTime": "2025-11-17T16:00:00Z",
-      "duration": "PT30M",
-      "summary": "Drupal Asia Steering Committee Panel",
-      "location": "Location Hiten B",
-      "description": "Come and chat to the organisers of DrupalCons in Asia",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/drupal-asia-steering-committee-panel",
-      "track": "",
-      "speakers": [
-        "Michael Richardson"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T15:40:00Z",
       "endTime": "2025-11-17T16:00:00Z",
       "duration": "PT20M",
       "summary": "改めて振り返るDrupalのモジュール/テーマのデバッグ方法",
-      "location": "Location Hiten C/D",
+      "location": "Location Hiten B",
       "description": "Drupalでモジュールやテーマを開発する際や動作の中で気になる挙動を見つけた際の原因特定を行う為のデバッグ方法について普段私がどのように行っているかをハンズオンを交えて紹介します。 主な内容は以下の通りです。 ・デバッグ環境の整え方 ・デバッグに便利なコントリビュートモジュールの紹介(Devel, Web Profiler) ・IDE(PhpStorm)とXdebugを組合せたデバッグ方法",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/gaimetezhenrifanrudrupalnomoshiyurutemanotehatsukufangfa",
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "otofu"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T16:15:00Z",
@@ -314,7 +349,8 @@
       "speakers": [
         "Masami",
         "Akihito.Kimura@ntt.com"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T16:15:00Z",
@@ -328,7 +364,8 @@
       "speakers": [
         "zaporylie",
         "jsacksick"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T16:15:00Z",
@@ -342,7 +379,8 @@
       "speakers": [
         "anjali-rathod",
         "ygoex"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-17T17:00:00Z",
@@ -353,7 +391,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/networking-drinks",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T09:00:00Z",
@@ -364,7 +403,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/general-contribution-day-2",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T09:00:00Z",
@@ -375,7 +415,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/welcome-0",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T09:15:00Z",
@@ -388,7 +429,8 @@
       "track": "drupal showcase / drupalショーケース",
       "speakers": [
         "Jason Cort"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T10:00:00Z",
@@ -399,7 +441,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/morning-break-0",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T10:15:00Z",
@@ -413,7 +456,8 @@
       "speakers": [
         "gargsuchi",
         "JCT321"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T10:15:00Z",
@@ -426,7 +470,8 @@
       "track": "site building / サイト構築",
       "speakers": [
         "drupak"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T10:15:00Z",
@@ -439,20 +484,22 @@
       "track": "drupal cms",
       "speakers": [
         "lauriii"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T11:15:00Z",
       "endTime": "2025-11-18T12:00:00Z",
       "duration": "PT45M",
-      "summary": "Don’t Write Code, Start Prompting! AI Orchestration of Digital",
+      "summary": "Don’t Write Code, Start Prompting! AI Orchestration of Digital Experiences",
       "location": "Location Hiten C/D",
       "description": "We introduce the architecture of a technology-agnostic workflow engine that defines human-readable decision rules in YAML, ingests them into a RAG datastore, and leverages an LLM to retrieve relevant rules and instantly determine and execute the next approver.",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/dont-write-code-start-prompting-ai-orchestration-digital",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/dont-write-code-start-prompting-ai-orchestration-digital-experiences",
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "yas"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T11:15:00Z",
@@ -466,7 +513,8 @@
       "speakers": [
         "Matthew Messmer",
         "aniketto"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T11:15:00Z",
@@ -479,7 +527,8 @@
       "track": "drupal cms",
       "speakers": [
         "gábor hojtsy"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T12:00:00Z",
@@ -490,7 +539,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/lunch-0",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T13:00:00Z",
@@ -504,7 +554,22 @@
       "speakers": [
         "umekikazuya",
         "sachikonitta"
-      ]
+      ],
+      "timezone": ""
+    },
+    {
+      "startTime": "2025-11-18T13:00:00Z",
+      "endTime": "2025-11-18T13:15:00Z",
+      "duration": "PT15M",
+      "summary": "Epic things you built with Drupal AI",
+      "location": "Location Hiten A",
+      "description": "Curious about how AI is actually being used in the wild? Join Michael for an in-depth look at the awesome things that have been built with Drupal AI. This session gives an overview of actual running Drupal AI Implementations, how they work, and what we can learn from them.",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/epic-things-you-built-drupal-ai",
+      "track": "sponsored session",
+      "speakers": [
+        "schnitzel"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T13:00:00Z",
@@ -517,47 +582,51 @@
       "track": "drupal cms",
       "speakers": [
         "mandclu"
-      ]
+      ],
+      "timezone": ""
     },
     {
-      "startTime": "2025-11-18T13:00:00Z",
-      "endTime": "2025-11-18T13:15:00Z",
-      "duration": "PT15M",
-      "summary": "The Future of Workflow Optimization with AI \u0026 Drupal Canvas",
+      "startTime": "2025-11-18T13:25:00Z",
+      "endTime": "2025-11-18T13:45:00Z",
+      "duration": "PT20M",
+      "summary": "From Figma to Drupal: A Guide for Bridging Design and Front-End Development",
       "location": "Location Hiten A",
-      "description": "AI is no longer a “nice-to-have” but a necessity for businesses looking to maintain a competitive edge. By integrating AI solutions from Drupal, organizations can drive more efficiency and optimize their content creation workflows.",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/future-workflow-optimization-ai-drupal-canvas",
-      "track": "sponsored session",
+      "description": "Curious about how to unlock Figma's full potential for a faster prototyping and implementation of user interfaces in Drupal projects?",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/figma-drupal-guide-bridging-design-and-front-end-development",
+      "track": "ux, accessibility, and design / ux、アクセシビリティ、デザイン",
       "speakers": [
-        "Maggie Schroeder",
-        "shumpei"
-      ]
+        "ygoex"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T14:00:00Z",
       "endTime": "2025-11-18T14:45:00Z",
       "duration": "PT45M",
       "summary": "Declarative Shadow DOM and the future of Drupal Theming",
-      "location": "Location Hiten A",
+      "location": "Location Hiten C/D",
       "description": "Drupal's old school theming system is server-side rendering. And in the tech world, everything old is new again. In the last two years, modern frontend frameworks have been trying to figure out how to server-side render their client-side JavaScript.",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/declarative-shadow-dom-and-future-drupal-theming",
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "JohnAlbin"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T14:00:00Z",
-      "endTime": "2025-11-18T14:45:00Z",
-      "duration": "PT45M",
-      "summary": "How to become a Drupal Certified Partner agency",
-      "location": "Location Hiten C/D",
-      "description": "Curious about becoming a Drupal Certified Partner? Drop in for an informal discussion with Drupal Association CEO Tim Doyle to learn how your agency can get involved, the benefits of certification, and ways to strengthen your connection with the global Drupal community.",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/how-become-drupal-certified-partner-agency",
-      "track": "",
+      "endTime": "2025-11-18T14:15:00Z",
+      "duration": "PT15M",
+      "summary": "The Future of Workflow Optimization with AI \u0026 Drupal Canvas",
+      "location": "Location Hiten A",
+      "description": "AI is no longer a “nice-to-have” but a necessity for businesses looking to maintain a competitive edge. By identifying inefficiencies and integrating AI solutions from Drupal, organizations can create more collaborative, efficiency, and optimize workflows and the content creation process.",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/future-workflow-optimization-ai-drupal-canvas",
+      "track": "sponsored session",
       "speakers": [
-        "Tim Doyle"
-      ]
+        "Maggie Schroeder",
+        "shumpei"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T14:00:00Z",
@@ -570,7 +639,22 @@
       "track": "devops",
       "speakers": [
         "jimmycann"
-      ]
+      ],
+      "timezone": ""
+    },
+    {
+      "startTime": "2025-11-18T14:25:00Z",
+      "endTime": "2025-11-18T14:45:00Z",
+      "duration": "PT20M",
+      "summary": "I’m Not a Front-End Dev: Building Clean UI in Drupal with SDCs and Shoelace",
+      "location": "Location Hiten A",
+      "description": "As a full-stack Drupal developer, I’ve often found front-end frameworks too opinionated or hard to plug into Drupal cleanly. With Single Directory Components (SDCs) and Web Components like Shoelace, we now have a scalable, framework-free way to build modern UI — without needing React or Vue.",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/im-not-front-end-dev-building-clean-ui-drupal-sdcs-and-shoelace",
+      "track": "development and coding / 開発とコーディング",
+      "speakers": [
+        "yi_jiang"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T14:45:00Z",
@@ -581,20 +665,36 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/afternoon-break-0",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T15:00:00Z",
       "endTime": "2025-11-18T15:45:00Z",
       "duration": "PT45M",
       "summary": "AI Agents in Drupal CMS - Create your own agent",
-      "location": "Location Hiten B",
+      "location": "Location Hiten C/D",
       "description": "You’ve seen what AI Agents can do in Drupal. What if you could create your own Agents? What if this were so easy that every module across the Drupal ecosystem could have its agents, and they all worked together in harmony?",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/ai-agents-drupal-cms-create-your-own-agent",
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "https://www.drupal.org/u/vincenzo-gambino"
-      ]
+      ],
+      "timezone": ""
+    },
+    {
+      "startTime": "2025-11-18T15:00:00Z",
+      "endTime": "2025-11-18T15:45:00Z",
+      "duration": "PT45M",
+      "summary": "How to become a Drupal Certified Partner agency",
+      "location": "Location Hiten B",
+      "description": "Curious about becoming a Drupal Certified Partner? Drop in for an informal discussion with Drupal Association CEO Tim Doyle to learn how your agency can get involved, the benefits of certification, and ways to strengthen your connection with the global Drupal community.",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/how-become-drupal-certified-partner-agency",
+      "track": "",
+      "speakers": [
+        "Tim Doyle"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T15:00:00Z",
@@ -608,7 +708,22 @@
       "speakers": [
         "Akihiko Sakamoto",
         "Hirokazu Awaji"
-      ]
+      ],
+      "timezone": ""
+    },
+    {
+      "startTime": "2025-11-18T16:15:00Z",
+      "endTime": "2025-11-18T17:00:00Z",
+      "duration": "PT45M",
+      "summary": "\"当たり前\"を疑いましょ",
+      "location": "Location Hiten B",
+      "description": "「Taxonomy便利ですよね。」って導入をいつもだったらするんですが、今回はできません。なぜなら私は、TaxonomyをCoreから外してほしいと思っているから。 この冒頭で「何言ってるの？」って感じた方。Taxonomyの強みを言えますか？ 本セッションでは、「分類要件といえばTaxonomy！」というDrupalの常識(当たり前)にフォーカスをあてて、その“当たり前”や”習慣”が本当に合理的かを評価し、フレームワークとの向き合い方について、今までのDrupalからすると当たり前ではない提案をさせていただきます。",
+      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/dangtariqianwoyiimashiyo",
+      "track": "site building / サイト構築",
+      "speakers": [
+        "umekikazuya"
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T16:15:00Z",
@@ -621,20 +736,8 @@
       "track": "community health / コミュニティヘルス",
       "speakers": [
         "nikitaaswani"
-      ]
-    },
-    {
-      "startTime": "2025-11-18T16:15:00Z",
-      "endTime": "2025-11-18T17:00:00Z",
-      "duration": "PT45M",
-      "summary": "Redesign Taxonomy — \"当たり前\"を疑いましょ",
-      "location": "Location Hiten B",
-      "description": "「Taxonomy便利ですよね。」って導入をいつもだったらするんですが、今回はできません。なぜなら私は、TaxonomyをCoreから外してほしいと思っているから。 この冒頭で「何言ってるの？」って感じた方。Taxonomyの強みを言えますか？ 本セッションでは、当モジュールの「強み」と「制約」を批判的に検討します。どの点がユニークで、どの機能がカスタムエンティティや独自モジュールで容易に代替可能なのか、また、どのようなケースで不要な複雑さを招くのかを具体的に掘り下げます。 また、どのようなケースで不要な複雑さを招くのかを具体的に掘り下げます。",
-      "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/redesign-taxonomy-dangtariqianwoyiimashiyo",
-      "track": "site building / サイト構築",
-      "speakers": [
-        "umekikazuya"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T16:15:00Z",
@@ -647,7 +750,8 @@
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "sachikonitta"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T16:40:00Z",
@@ -660,7 +764,8 @@
       "track": "development and coding / 開発とコーディング",
       "speakers": [
         "murz"
-      ]
+      ],
+      "timezone": ""
     },
     {
       "startTime": "2025-11-18T17:00:00Z",
@@ -671,7 +776,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/closing-ceremony",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     },
     {
       "startTime": "2025-11-19T09:00:00Z",
@@ -682,7 +788,8 @@
       "description": "",
       "link": "https://events.drupal.org/nara2025/schedule//nara2025/session/general-contribution-day-3",
       "track": "",
-      "speakers": null
+      "speakers": null,
+      "timezone": ""
     }
   ],
   "result": "✅",
